@@ -1,0 +1,70 @@
+.header {
+  background-color: var(--bg-green-light-color);
+
+  &--active {
+    .header__buttons {
+      left: 0%;
+
+      &:before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background-color: var(--bg-green-light-color);
+        z-index: 3;
+      }
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @include mobile {
+      min-height: 60px;
+    }
+
+    @include tablet {
+      min-height: 80px;
+    }
+  }
+
+  &__logo {
+    // Хотела уточнить, если только одно свойство (z-index)
+    // в нескольких блоках повторяется лучше выносить в отдельный класс или и так можно оставить?
+    z-index: 5;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+
+    @include mobile {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: -100%;
+      overflow: auto;
+      z-index: 2;
+      background-color: var(--bg-primary-color);
+      transition: left 0.3s ease 0s;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 72px 16px;
+      box-sizing: border-box;
+    }
+  }
+
+  &__avatar {
+    z-index: 5;
+  }
+
+  &__burger {
+    z-index: 5;
+  }
+}

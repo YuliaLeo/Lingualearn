@@ -1,0 +1,15 @@
+.footer {
+  background-color: var(--bg-green-light-color);
+  color: var(--primary-light-color);
+  padding: 20px 0px;
+
+  @include mobile {
+    padding: 10px 0px;
+  }
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}

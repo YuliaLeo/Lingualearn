@@ -1,0 +1,1217 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
+    />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
+      integrity="sha512-oHDEc8Xed4hiW6CxD7qjbnI+B07vDdX7hEPTvn9pSZO1bcRqHp8mj9pyr+8RVC2GmtEfI2Bi9Ke9Ass0as+zpg=="
+      crossorigin="anonymous"
+      referrerpolicy="no-referrer"
+    />
+    <link rel="stylesheet" href="css/style.css" />
+    <title>LinguaLearn</title>
+  </head>
+  <body>
+    <div class="wrapper">
+      <header class="header">
+        <div class="header__container container">
+          <a href="#" class="header__logo logo">
+            <h1 class="logo__text">LinguaLearn</h1>
+          </a>
+          <div class="spacer"></div>
+          <nav class="header__buttons">
+            <!--Здесь сомневалась, делать ли списком или просто ссылками, 
+				но так как элементов немного решила оставить ссылки
+			(Вообще я хочу сделать для квиза и кроссворда отдельные страницы, но тут я 
+			решила сделать разметку пока всю в одном файле и потом уже поделить)-->
+            <a href="#" class="button button--link">Quiz</a>
+            <a href="#" class="button button--link">Crossword</a>
+          </nav>
+          <a href="#" class="header__avatar avatar">
+            <picture>
+              <source srcset="img/photo.webp" type="image/webp" />
+              <img class="avatar__image" src="img/photo.jfif" alt="Avatar" />
+            </picture>
+          </a>
+          <div class="header__burger burger-menu">
+            <span class="burger-menu__line"></span>
+            <span class="burger-menu__line"></span>
+            <span class="burger-menu__line"></span>
+          </div>
+        </div>
+      </header>
+
+      <main class="main-content">
+        <div class="main-content__card container">
+          <!--Мне понравилась идея с переворачивающимися карточками, но я не очень уверена, правильно ли их делать 
+			так, как сделала я-->
+          <!--К карточкам я думаю крепить классы, чтобы менялись стили (они в css прописаны)-->
+          <div class="card">
+            <div class="card__front">
+              <div class="card__content">
+                <div class="card__counter">1 / 3</div>
+                <div class="card__word">Кошка</div>
+                <div class="card__example">Кошка сидит на полу</div>
+              </div>
+              <form action="#" class="card__form" name="wordForm">
+                <input
+                  autocomplete="off"
+                  placeholder="Введите слово"
+                  type="text"
+                  name="wordInput"
+                  class="card__input"
+                />
+                <button
+                  type="submit"
+                  class="card__check-btn button button--card"
+                >
+                  Проверить
+                </button>
+              </form>
+            </div>
+            <div class="card__back">
+              <div class="card__content">
+                <div class="card__counter">1 / 3</div>
+                <div class="card__word">Cat</div>
+                <div class="card__example">Cat is sitting on the floor</div>
+              </div>
+              <div class="card__check correct-answer">Правильно</div>
+              <div class="card__check incorrect-answer">Неправильно</div>
+              <button type="button" class="card__next button button--card">
+                Следующий
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-content__card container">
+          <div class="card">
+            <div class="card__front">
+              <div class="card__counter">1 / 3</div>
+              <form
+                action="#"
+                class="card__form-quiz form-quiz"
+                name="wordFormQuiz"
+              >
+                <div class="form-quiz__word">
+                  Подберите синонимы к слову beautiful
+                </div>
+                <div class="form-quiz__answers">
+                  <!--Решила делать через label, чтобы кликать можно было и по всему пространству рядом-->
+                  <label class="form-quiz__answer" for="answer-1">
+                    <input
+                      type="checkbox"
+                      class="form-quiz__checkbox"
+                      id="answer-1"
+                    />
+                    <span class="form-quiz__text">Handsome</span>
+                  </label>
+                  <label class="form-quiz__answer" for="answer-2">
+                    <input
+                      type="checkbox"
+                      class="form-quiz__checkbox"
+                      id="answer-2"
+                    />
+                    <span class="form-quiz__text">Ugly</span>
+                  </label>
+                  <label class="form-quiz__answer" for="answer-3">
+                    <input
+                      type="checkbox"
+                      class="form-quiz__checkbox"
+                      id="answer-3"
+                    />
+                    <span class="form-quiz__text">Pretty</span>
+                  </label>
+                  <label class="form-quiz__answer" for="answer-4">
+                    <input
+                      type="checkbox"
+                      class="form-quiz__checkbox"
+                      id="answer-4"
+                    />
+                    <span class="form-quiz__text">Dreadful</span>
+                  </label>
+                </div>
+                <button
+                  type="submit"
+                  class="card__check-btn button button--card"
+                >
+                  Проверить
+                </button>
+              </form>
+            </div>
+            <div class="card__back">
+              <div class="card__content">
+                <div class="card__counter">1 / 3</div>
+                <div class="card__word">
+                  Подберите синонимы к слову beautiful
+                </div>
+                <div class="card__correct-answers">
+                  <div class="card__correct-answer">Handsome</div>
+                  <div class="card__correct-answer">Pretty</div>
+                </div>
+              </div>
+              <div class="card__check correct-answer">Правильно</div>
+              <div class="card__check incorrect-answer">Неправильно</div>
+              <button type="button" class="card__next button button--card">
+                Следующий
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="main-content__result container">
+          <div class="result">
+            <h2 class="result__title title-h2">Результаты</h2>
+            <div class="result__check correct-answer">
+              Правильно
+              <span class="result__count">2</span>
+            </div>
+            <div class="result__check incorrect-answer">
+              Неправильно
+              <span class="result__count">1</span>
+            </div>
+            <button type="button" class="result__repeat button button--card">
+              Повторить неправильные
+            </button>
+            <button type="button" class="result__finish button button--card">
+              Завершить
+            </button>
+          </div>
+        </div>
+
+        <div class="main-content__crossword container">
+          <div class="crossword">
+            <h2 class="crossword__title title-h2">Кроссворд</h2>
+            <div class="crossword__main">
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil letter-correct">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="K"
+                />
+                <span class="crossword__number">1</span>
+              </div>
+              <div class="crossword__ceil letter-correct">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="N"
+                />
+                <span class="crossword__number">2</span>
+              </div>
+              <div class="crossword__ceil letter-correct">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="I"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil letter-correct letter-incorrect">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="F"
+                />
+                <span class="crossword__number">3</span>
+              </div>
+              <div class="crossword__ceil letter-correct">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="E"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="A"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil letter-incorrect">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="O"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="P"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil letter-incorrect">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="R"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="K"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil letter-incorrect">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="K"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="B"
+                />
+                <span class="crossword__number">4</span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="I"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="S"
+                />
+                <span class="crossword__number">5</span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="P"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="O"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="O"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="N"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="W"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="P"
+                />
+                <span class="crossword__number">6</span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="L"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="A"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="T"
+                />
+                <span class="crossword__number">7</span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="E"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="E"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input show-square"
+                  placeholder="A"
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+              <div class="crossword__ceil">
+                <input
+                  autocomplete="off"
+                  type="text"
+                  maxlength="1"
+                  class="crossword__input"
+                  disabled
+                />
+                <span class="crossword__number"></span>
+              </div>
+            </div>
+            <div class="crossword__definitions">
+              <div class="crossword__definition definition-done">1. Нож</div>
+              <div class="crossword__definition">2. Салфетка</div>
+              <div class="crossword__definition">3. Вилка</div>
+              <div class="crossword__definition">4. Миска</div>
+              <div class="crossword__definition">5. Ложка</div>
+              <div class="crossword__definition">6. Тарелка</div>
+              <div class="crossword__definition">7. Чай</div>
+            </div>
+          </div>
+        </div>
+      </main>
+
+      <footer class="footer">
+        <div class="footer__container container">LinguaLearn, 2022 &copy;</div>
+      </footer>
+    </div>
+  </body>
+</html>
