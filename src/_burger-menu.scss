@@ -5,6 +5,8 @@
   cursor: pointer;
 
   &__line {
+    // Здесь у меня IDE ругается "Property transition overwrites property transition"
+    // То есть два верхних transition затрутся тем, который в 12 строке
     transition: top 0.3s ease 0s;
     transition: bottom 0.3s ease 0s;
     transition: transform 0.3s ease 0s;

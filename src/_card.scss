@@ -19,6 +19,7 @@
     .card__back {
       background-color: var(--bg-green-ultra-light-color);
     }
+
     .incorrect-answer {
       display: none;
     }
@@ -52,6 +53,7 @@
     box-shadow: 4px 4px 8px 0px var(--black-transparent-color);
     overflow: hidden;
     backface-visibility: hidden;
+    // Можно это не писать префикс, как минимум потому-что это свойство поддерживается на всех новых устройствах
     -webkit-backface-visibility: hidden;
     transition: transform 0.5s;
   }
@@ -86,6 +88,9 @@
   }
 
   &__correct-answer {
+    // Можно (и даже нужно) поступить с шрифтами, аналогично font-weight.
+    // Соответственно будет несколько классов типа text_xs, text_m, text_l  и тп.
+    // Это позволит не создавать класс для конкретного блока чтобы задать ему это свойство + избавит от копипасты как, например, в 93 и 97 строках
     font-size: 20px;
   }
 
