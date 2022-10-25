@@ -1,7 +1,7 @@
 .footer {
   background-color: var(--bg-green-light-color);
   color: var(--primary-light-color);
-  padding: 20px 0px;
+  padding: 20px 0px; // Если значение какого-либо свойства = 0, то можно не указывать единицы измерения
 
   @include mobile {
     padding: 10px 0px;

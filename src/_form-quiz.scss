@@ -16,7 +16,7 @@
 
   &__answer {
     position: relative;
-    cursor: pointer;
+    cursor: pointer; // Можно вынести в класс clickable
     display: flex;
     align-items: center;
   }
