@@ -16,8 +16,6 @@
   &__check {
     display: flex;
     justify-content: space-between;
-    font-size: 20px;
-    font-weight: 500;
 
     @include tablet {
       &.correct-answer {

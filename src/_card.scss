@@ -53,8 +53,6 @@
     box-shadow: 4px 4px 8px 0px var(--black-transparent-color);
     overflow: hidden;
     backface-visibility: hidden;
-    // Можно это не писать префикс, как минимум потому-что это свойство поддерживается на всех новых устройствах
-    -webkit-backface-visibility: hidden;
     transition: transform 0.5s;
   }
 
@@ -87,25 +85,15 @@
     gap: var(--standard-gap);
   }
 
-  &__correct-answer {
-    // Можно (и даже нужно) поступить с шрифтами, аналогично font-weight.
-    // Соответственно будет несколько классов типа text_xs, text_m, text_l  и тп.
-    // Это позволит не создавать класс для конкретного блока чтобы задать ему это свойство + избавит от копипасты как, например, в 93 и 97 строках
-    font-size: 20px;
-  }
-
   &__counter {
-    font-size: 20px;
     text-align: center;
   }
 
   &__word {
-    font-size: 28px;
     text-align: center;
   }
 
   &__example {
-    font-size: 24px;
     text-align: center;
   }
 
@@ -123,8 +111,6 @@
   }
 
   &__check {
-    font-size: 24px;
-    font-weight: 700;
     text-transform: uppercase;
     letter-spacing: 4px;
     text-align: center;

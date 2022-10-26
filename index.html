@@ -28,16 +28,12 @@
       <header class="header">
         <div class="header__container container">
           <a href="#" class="header__logo logo">
-            <h1 class="logo__text">LinguaLearn</h1>
+            <h1 class="logo__text text-bold_bold">LinguaLearn</h1>
           </a>
           <div class="spacer"></div>
           <nav class="header__buttons">
-            <!--Здесь сомневалась, делать ли списком или просто ссылками, 
-				но так как элементов немного решила оставить ссылки
-			(Вообще я хочу сделать для квиза и кроссворда отдельные страницы, но тут я 
-			решила сделать разметку пока всю в одном файле и потом уже поделить)-->
-            <a href="#" class="button button--link">Quiz</a>
-            <a href="#" class="button button--link">Crossword</a>
+            <a href="#" class="button button--link text-bold_medium">Quiz</a>
+            <a href="#" class="button button--link text-bold_medium">Crossword</a>
           </nav>
           <a href="#" class="header__avatar avatar">
             <picture>
@@ -45,7 +41,7 @@
               <img class="avatar__image" src="img/photo.jfif" alt="Avatar" />
             </picture>
           </a>
-          <div class="header__burger burger-menu">
+          <div class="header__burger burger-menu clickable">
             <span class="burger-menu__line"></span>
             <span class="burger-menu__line"></span>
             <span class="burger-menu__line"></span>
@@ -55,15 +51,12 @@
 
       <main class="main-content">
         <div class="main-content__card container">
-          <!--Мне понравилась идея с переворачивающимися карточками, но я не очень уверена, правильно ли их делать 
-			так, как сделала я-->
-          <!--К карточкам я думаю крепить классы, чтобы менялись стили (они в css прописаны)-->
           <div class="card">
             <div class="card__front">
               <div class="card__content">
-                <div class="card__counter">1 / 3</div>
-                <div class="card__word">Кошка</div>
-                <div class="card__example">Кошка сидит на полу</div>
+                <div class="card__counter text_xs">1 / 3</div>
+                <div class="card__word text_l">Кошка</div>
+                <div class="card__example text_m">Кошка сидит на полу</div>
               </div>
               <form action="#" class="card__form" name="wordForm">
                 <input
@@ -75,7 +68,7 @@
                 />
                 <button
                   type="submit"
-                  class="card__check-btn button button--card"
+                  class="card__check-btn button button--card text-bold_medium"
                 >
                   Проверить
                 </button>
@@ -83,13 +76,13 @@
             </div>
             <div class="card__back">
               <div class="card__content">
-                <div class="card__counter">1 / 3</div>
-                <div class="card__word">Cat</div>
-                <div class="card__example">Cat is sitting on the floor</div>
+                <div class="card__counter text_xs">1 / 3</div>
+                <div class="card__word text_l">Cat</div>
+                <div class="card__example text_m">Cat is sitting on the floor</div>
               </div>
-              <div class="card__check correct-answer">Правильно</div>
-              <div class="card__check incorrect-answer">Неправильно</div>
-              <button type="button" class="card__next button button--card">
+              <div class="card__check correct-answer text-bold_bold text_m">Правильно</div>
+              <div class="card__check incorrect-answer text-bold_bold text_m">Неправильно</div>
+              <button type="button" class="card__next button button--card text-bold_medium">
                 Следующий
               </button>
             </div>
@@ -99,18 +92,17 @@
         <div class="main-content__card container">
           <div class="card">
             <div class="card__front">
-              <div class="card__counter">1 / 3</div>
+              <div class="card__counter text_xs">1 / 3</div>
               <form
                 action="#"
                 class="card__form-quiz form-quiz"
                 name="wordFormQuiz"
               >
-                <div class="form-quiz__word">
+                <div class="form-quiz__word text_xs">
                   Подберите синонимы к слову beautiful
                 </div>
                 <div class="form-quiz__answers">
-                  <!--Решила делать через label, чтобы кликать можно было и по всему пространству рядом-->
-                  <label class="form-quiz__answer" for="answer-1">
+                  <label class="form-quiz__answer clickable" for="answer-1">
                     <input
                       type="checkbox"
                       class="form-quiz__checkbox"
@@ -118,7 +110,7 @@
                     />
                     <span class="form-quiz__text">Handsome</span>
                   </label>
-                  <label class="form-quiz__answer" for="answer-2">
+                  <label class="form-quiz__answer clickable" for="answer-2">
                     <input
                       type="checkbox"
                       class="form-quiz__checkbox"
@@ -126,7 +118,7 @@
                     />
                     <span class="form-quiz__text">Ugly</span>
                   </label>
-                  <label class="form-quiz__answer" for="answer-3">
+                  <label class="form-quiz__answer clickable" for="answer-3">
                     <input
                       type="checkbox"
                       class="form-quiz__checkbox"
@@ -134,7 +126,7 @@
                     />
                     <span class="form-quiz__text">Pretty</span>
                   </label>
-                  <label class="form-quiz__answer" for="answer-4">
+                  <label class="form-quiz__answer clickable" for="answer-4">
                     <input
                       type="checkbox"
                       class="form-quiz__checkbox"
@@ -145,7 +137,7 @@
                 </div>
                 <button
                   type="submit"
-                  class="card__check-btn button button--card"
+                  class="card__check-btn button button--card text-bold_medium"
                 >
                   Проверить
                 </button>
@@ -153,18 +145,18 @@
             </div>
             <div class="card__back">
               <div class="card__content">
-                <div class="card__counter">1 / 3</div>
-                <div class="card__word">
+                <div class="card__counter text_xs">1 / 3</div>
+                <div class="card__word text_l">
                   Подберите синонимы к слову beautiful
                 </div>
                 <div class="card__correct-answers">
-                  <div class="card__correct-answer">Handsome</div>
-                  <div class="card__correct-answer">Pretty</div>
+                  <div class="card__correct-answer text_xs">Handsome</div>
+                  <div class="card__correct-answer text_xs">Pretty</div>
                 </div>
               </div>
-              <div class="card__check correct-answer">Правильно</div>
-              <div class="card__check incorrect-answer">Неправильно</div>
-              <button type="button" class="card__next button button--card">
+              <div class="card__check correct-answer text-bold_bold text_m">Правильно</div>
+              <div class="card__check incorrect-answer text-bold_bold text_m">Неправильно</div>
+              <button type="button" class="card__next button button--card text-bold_medium">
                 Следующий
               </button>
             </div>
@@ -173,19 +165,19 @@
 
         <div class="main-content__result container">
           <div class="result">
-            <h2 class="result__title title-h2">Результаты</h2>
-            <div class="result__check correct-answer">
+            <h2 class="result__title title--h2 text_m">Результаты</h2>
+            <div class="result__check correct-answer text-bold_medium text_xs">
               Правильно
               <span class="result__count">2</span>
             </div>
-            <div class="result__check incorrect-answer">
+            <div class="result__check incorrect-answer text-bold_medium text_xs">
               Неправильно
               <span class="result__count">1</span>
             </div>
-            <button type="button" class="result__repeat button button--card">
+            <button type="button" class="result__repeat button button--card text-bold_medium">
               Повторить неправильные
             </button>
-            <button type="button" class="result__finish button button--card">
+            <button type="button" class="result__finish button button--card text-bold_medium">
               Завершить
             </button>
           </div>
@@ -193,14 +185,14 @@
 
         <div class="main-content__crossword container">
           <div class="crossword">
-            <h2 class="crossword__title title-h2">Кроссворд</h2>
+            <h2 class="crossword__title title--h2 text_m">Кроссворд</h2>
             <div class="crossword__main">
               <div class="crossword__ceil">
                 <input
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -210,7 +202,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -220,7 +212,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -230,7 +222,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="K"
                 />
                 <span class="crossword__number">1</span>
@@ -240,7 +232,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="N"
                 />
                 <span class="crossword__number">2</span>
@@ -250,7 +242,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="I"
                 />
                 <span class="crossword__number"></span>
@@ -260,7 +252,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="F"
                 />
                 <span class="crossword__number">3</span>
@@ -270,7 +262,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="E"
                 />
                 <span class="crossword__number"></span>
@@ -280,7 +272,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -290,7 +282,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -300,7 +292,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -310,7 +302,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -320,7 +312,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -330,7 +322,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -340,7 +332,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="A"
                 />
                 <span class="crossword__number"></span>
@@ -350,7 +342,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -360,7 +352,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="O"
                 />
                 <span class="crossword__number"></span>
@@ -370,7 +362,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -380,7 +372,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -390,7 +382,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -400,7 +392,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -410,7 +402,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -420,7 +412,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -430,7 +422,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -440,7 +432,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="P"
                 />
                 <span class="crossword__number"></span>
@@ -450,7 +442,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -460,7 +452,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="R"
                 />
                 <span class="crossword__number"></span>
@@ -470,7 +462,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -480,7 +472,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -490,7 +482,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -500,7 +492,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -510,7 +502,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -520,7 +512,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -530,7 +522,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -540,7 +532,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="K"
                 />
                 <span class="crossword__number"></span>
@@ -550,7 +542,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -560,7 +552,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="K"
                 />
                 <span class="crossword__number"></span>
@@ -570,7 +562,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -580,7 +572,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -590,7 +582,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -600,7 +592,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -610,7 +602,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -620,7 +612,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="B"
                 />
                 <span class="crossword__number">4</span>
@@ -630,7 +622,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -640,7 +632,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="I"
                 />
                 <span class="crossword__number"></span>
@@ -650,7 +642,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -660,7 +652,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -670,7 +662,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -680,7 +672,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -690,7 +682,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -700,7 +692,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="S"
                 />
                 <span class="crossword__number">5</span>
@@ -710,7 +702,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="P"
                 />
                 <span class="crossword__number"></span>
@@ -720,7 +712,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="O"
                 />
                 <span class="crossword__number"></span>
@@ -730,7 +722,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="O"
                 />
                 <span class="crossword__number"></span>
@@ -740,7 +732,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="N"
                 />
                 <span class="crossword__number"></span>
@@ -750,7 +742,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -760,7 +752,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -770,7 +762,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -780,7 +772,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -790,7 +782,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -800,7 +792,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -810,7 +802,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -820,7 +812,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="W"
                 />
                 <span class="crossword__number"></span>
@@ -830,7 +822,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -840,7 +832,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -850,7 +842,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -860,7 +852,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -870,7 +862,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -880,7 +872,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -890,7 +882,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -900,7 +892,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -910,7 +902,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="P"
                 />
                 <span class="crossword__number">6</span>
@@ -920,7 +912,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="L"
                 />
                 <span class="crossword__number"></span>
@@ -930,7 +922,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="A"
                 />
                 <span class="crossword__number"></span>
@@ -940,7 +932,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="T"
                 />
                 <span class="crossword__number">7</span>
@@ -950,7 +942,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="E"
                 />
                 <span class="crossword__number"></span>
@@ -960,7 +952,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -970,7 +962,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -980,7 +972,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -990,7 +982,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1000,7 +992,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1010,7 +1002,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1020,7 +1012,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1030,7 +1022,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1040,7 +1032,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="E"
                 />
                 <span class="crossword__number"></span>
@@ -1050,7 +1042,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1060,7 +1052,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1070,7 +1062,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1080,7 +1072,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1090,7 +1082,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1100,7 +1092,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1110,7 +1102,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1120,7 +1112,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1130,7 +1122,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1140,7 +1132,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input show-square"
+                  class="crossword__input text-bold_medium show-square"
                   placeholder="A"
                 />
                 <span class="crossword__number"></span>
@@ -1150,7 +1142,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1160,7 +1152,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1170,7 +1162,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1180,7 +1172,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
@@ -1190,7 +1182,7 @@
                   autocomplete="off"
                   type="text"
                   maxlength="1"
-                  class="crossword__input"
+                  class="crossword__input text-bold_medium"
                   disabled
                 />
                 <span class="crossword__number"></span>
