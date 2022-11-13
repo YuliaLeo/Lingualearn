@@ -1,53 +1,7 @@
-<!DOCTYPE html>
-<html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta
-      name="viewport"
-      content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0"
-    />
-    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-    <link rel="preconnect" href="https://fonts.googleapis.com" />
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link
-      href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;700&display=swap"
-      rel="stylesheet"
-    />
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/normalize/8.0.1/normalize.css"
-      integrity="sha512-oHDEc8Xed4hiW6CxD7qjbnI+B07vDdX7hEPTvn9pSZO1bcRqHp8mj9pyr+8RVC2GmtEfI2Bi9Ke9Ass0as+zpg=="
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
-    <link rel="stylesheet" href="css/style.css" />
-    <title>LinguaLearn</title>
-  </head>
-  <body>
-    <div class="wrapper">
-      <header class="header">
-        <div class="header__container container">
-          <a href="#" class="header__logo logo">
-            <h1 class="logo__text text-bold_bold">LinguaLearn</h1>
-          </a>
-          <div class="spacer"></div>
-          <nav class="header__buttons">
-            <a href="#" class="button button--link text-bold_medium">Quiz</a>
-            <a href="#" class="button button--link text-bold_medium">Crossword</a>
-          </nav>
-          <a href="#" class="header__avatar avatar">
-            <picture>
-              <source srcset="img/photo.webp" type="image/webp" />
-              <img class="avatar__image" src="img/photo.jfif" alt="Avatar" />
-            </picture>
-          </a>
-          <div class="header__burger burger-menu clickable">
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-            <span class="burger-menu__line"></span>
-          </div>
-        </div>
-      </header>
+<template>
+   <div class="wrapper">
+    
+		<AppHeader></AppHeader>
 
       <main class="main-content">
         <div class="main-content__card container">
@@ -1201,9 +1155,21 @@
         </div>
       </main>
 
-      <footer class="footer">
-        <div class="footer__container container">LinguaLearn, 2022 &copy;</div>
-      </footer>
-    </div>
-  </body>
-</html>
+		<AppFooter> </AppFooter>
+   </div>
+</template>
+
+<script>
+import AppFooter from "@/components/AppFooter.vue";
+import AppHeader from "@/components/AppHeader.vue";
+
+export default {
+	components: {
+		AppHeader, AppFooter
+	}
+}
+</script>
+
+<style lang="scss">
+	@import "@/assets/scss/style.scss";
+</style>
