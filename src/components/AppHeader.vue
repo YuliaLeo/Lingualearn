@@ -1,5 +1,6 @@
 <template>
-  <header class="header">
+  <header class="header" 
+	:class="{'header--active': headerActive}">
       <div class="header__container container">
          <Logo></Logo>
        	<div class="spacer"></div>
@@ -8,7 +9,7 @@
             <a href="#" class="button button--link text-bold_medium">Crossword</a>
          </nav>
 			<Avatar></Avatar>
-         <BurgerMenu></BurgerMenu>
+         <BurgerMenu @addActive="addHeaderActive"></BurgerMenu>
       </div>
    </header>
 </template>
@@ -21,6 +22,17 @@ import BurgerMenu from "@/components/BurgerMenu.vue";
 export default {
 	components: {
 		Logo, Avatar, BurgerMenu
+	}, 
+	data() {
+		return {
+			headerActive: false,
+		}
+	},
+	methods: {
+		addHeaderActive(state) {
+			this.headerActive = state;
+			this.$emit("addActive", state); //?
+		}
 	}
 }
 </script>

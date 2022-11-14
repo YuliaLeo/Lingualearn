@@ -24,11 +24,11 @@
     gap: 16px;
 
     @include mobile {
-      min-height: 60px;
+      max-height: 60px;
     }
 
     @include tablet {
-      min-height: 80px;
+      max-height: 80px;
     }
   }
 

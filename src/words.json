@@ -1,0 +1,58 @@
+[
+	{
+		"clue": "Нож",
+		"answer": "knife",
+		"position": 1,
+		"orientation": "across",
+		"startx": 4,
+		"starty": 1
+	},
+	{
+		"clue": "Салфетка",
+		"answer": "napkin",
+		"position": 2,
+		"orientation": "down",
+		"startx": 5,
+		"starty": 1
+	},
+	{
+		"clue": "Вилка",
+		"answer": "fork",
+		"position": 3,
+		"orientation": "down",
+		"startx": 7,
+		"starty": 1
+	},
+	{
+		"clue": "Миска",
+		"answer": "bowl",
+		"position": 4,
+		"orientation": "down",
+		"startx": 3,
+		"starty": 5
+	},
+	{
+		"clue": "Ложка",
+		"answer": "spoon",
+		"position": 5,
+		"orientation": "across",
+		"startx": 1,
+		"starty": 6
+	},
+	{
+		"clue": "Тарелка",
+		"answer": "plate",
+		"position": 6,
+		"orientation": "across",
+		"startx": 2,
+		"starty": 8
+	},
+	{
+		"clue": "Чай",
+		"answer": "tea",
+		"position": 7,
+		"orientation": "down",
+		"startx": 5,
+		"starty": 8
+	}
+]

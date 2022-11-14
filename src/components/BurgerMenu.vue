@@ -1,5 +1,8 @@
 <template>
-	<div class="header__burger burger-menu clickable">
+	<div class="header__burger burger-menu clickable" 
+		@click="addActive" 
+		:class="{'burger-menu--active': burgerActive}"
+	>
       <span class="burger-menu__line"></span>
       <span class="burger-menu__line"></span>
       <span class="burger-menu__line"></span>
@@ -8,6 +11,17 @@
 
 <script>
 export default {
+	data() {
+		return {
+			burgerActive: false,
+		}
+	}, 
+	methods: {
+		addActive() {
+			this.burgerActive = !this.burgerActive;
+			this.$emit("addActive", this.burgerActive)
+		}
+	}
 }
 </script>
 
