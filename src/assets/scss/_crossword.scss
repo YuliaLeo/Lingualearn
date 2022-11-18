@@ -17,24 +17,32 @@
   &__main {
     display: grid;
     gap: 2px;
+	 
+	 @include tablet {
+		grid-area: crossword;
+	 }
+  }
 
-    @include mobile {
-      grid-template-columns: repeat(10, 26px);
-      grid-template-rows: repeat(10, 26px);
-    }
-    @include tablet {
-      grid-template-columns: repeat(10, 40px);
-      grid-template-rows: repeat(10, 40px);
-      grid-area: crossword;
-    }
-    @include desktop {
-      grid-template-columns: repeat(10, 45px);
-      grid-template-rows: repeat(10, 45px);
-    }
+  &__row {
+	 display: flex;
+	 gap: 2px;
   }
 
   &__ceil {
     position: relative;
+
+	 @include mobile {
+		width: 27px;
+		height: 27px;
+    }
+    @include tablet {
+		width: 40px;
+		height: 40px;
+    }
+    @include desktop {
+		width: 45px;
+		height: 45px;
+    }
   }
 
   &__input {
@@ -46,6 +54,10 @@
     background-color: var(--black-transparent-color);
     text-align: center;
     text-transform: uppercase;
+
+	 &.activeCell {
+		background-color: var(--black-transparent-dark-color);
+	 }
 
     &:focus {
       border: 2px solid var(--primary-dark-color);
@@ -115,4 +127,8 @@
   .show-square {
     background-color: var(--red-light-color);
   }
+}
+
+.done {
+	background-color: var(--bg-green-ultra-light-color);
 }
