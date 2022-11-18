@@ -18,34 +18,32 @@
 						class="crossword__input text-bold_medium"
 						@keyup="onKeyUp"
 						@click="onClick"
+						@keydown="onKeyDown"
 						v-if="isInArray(colIdx, rowIdx)"
 					/>
 					<span class="crossword__number">{{getWordNumber(colIdx, rowIdx)}}</span>
 				</div>
 			</div>
 		</div>
-
 		<div class="crossword__definitions">
-					<div class="crossword__definition definition-done">1. Нож</div>
-					<div class="crossword__definition">2. Салфетка</div>
-					<div class="crossword__definition">3. Вилка</div>
-					<div class="crossword__definition">4. Миска</div>
-					<div class="crossword__definition">5. Ложка</div>
-					<div class="crossword__definition">6. Тарелка</div>
-					<div class="crossword__definition">7. Чай</div>
+			<div 
+			v-for="(word, wordIdx) in wordsCount"
+			:key="wordIdx"
+			:class="['crossword__definition', `position-${wordIdx}`]">
+				{{wordIdx + 1}}. {{wordsArray[wordIdx].clue}}
+			</div>
 		</div>
-
 	</div>
 </template>
 
 <script>
-import words from "@/words.json";
-words = words.words;
+import axios from 'axios';
 
 export default {
 	data() {
 		return {
-			wordsCount: words.length,
+			wordsArray: [],
+			wordsCount: 0,
 			wordCoords: [],
 			rows: [],
 			cols: [],
@@ -71,17 +69,17 @@ export default {
           	this.wordCoords.push(i);
 			 	this.wordCoords[i] = [];
 
-			 	for (let j = 0; j < words[i].answer.length; j++) {
+			 	for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
 					this.wordCoords[i].push(j);
-					let coords = words[i].orientation === 'across' 
-							?  `${words[i].startx++},${words[i].starty}` 
-							: `${words[i].startx},${words[i].starty++}`;
+					let coords = this.wordsArray[i].orientation === 'across' 
+							?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
+							: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
 					this.wordCoords[i][j] = coords;
           	}
 			}
 
 			for (let i = 0; i < this.wordsCount; i++) {
-				for (let j = 0; j < words[i].answer.length; j++) {
+				for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
            		this.cols.push(this.wordCoords[i][j].split(",")[0]);
             	this.rows.push(this.wordCoords[i][j].split(",")[1]);
           	}
@@ -90,6 +88,12 @@ export default {
         	this.rowsCount = Math.max.apply(Math, this.rows);
         	this.colsCount = Math.max.apply(Math, this.cols);
 		}, 
+
+		getStartCells() {
+	      for (let i = 0; i < this.wordsCount; i++) {
+				this.startWordCells.push(this.wordCoords[i][0]); 
+	      }
+      },
 
 		getCellClasses(cols, rows) {
 			const classes = [];
@@ -104,12 +108,6 @@ export default {
 
 			return classes;
 		},
-
-		getStartCells() {
-	      for (let i = 0; i < this.wordsCount; i++) {
-				this.startWordCells.push(this.wordCoords[i][0]); 
-	      }
-      },
 
 		getWordNumber(cols, rows){
 			let wordNumber;
@@ -176,9 +174,15 @@ export default {
 			}
 		},
 
+		onKeyDown(event) {
+			if (event.keyCode == 9) {  
+				event.preventDefault();
+    		}
+		},
+
 		onClick(event) {
 			this.mode = "setting ui";
-         if (this.solvedToggle) this.solvedToggle = false;
+         //if (this.solvedToggle) this.solvedToggle = false;
 
          this.updateByEntry(event);
 		},
@@ -202,8 +206,8 @@ export default {
 			let classes = this.getClasses(cellInput.parentElement, "position");
 
         	if (classes.length > 1) {
-          	let firstOrientation = words[classes[0].split("-")[1]].orientation;
-			 	let secondOrientation = words[classes[1].split("-")[1]].orientation;
+          	let firstOrientation = this.wordsArray[classes[0].split("-")[1]].orientation;
+			 	let secondOrientation = this.wordsArray[classes[1].split("-")[1]].orientation;
 
 				// для изменения направления, если кликнили на первый элемент в другом направлении
 				let ifCellIsFirst = [...document.querySelectorAll(".position-" + classes[0].split("-")[1] + " input")].indexOf(cellInput);
@@ -229,7 +233,7 @@ export default {
 
 			this.getActivePosition(event.target);
 
-			valToCheck = words[this.activePosition].answer.toLowerCase();
+			valToCheck = this.wordsArray[this.activePosition].answer.toLowerCase();
 
 			document.querySelectorAll(".position-" + this.activePosition + " input").forEach(el => {
 				currVal.push(el.value.toLowerCase());
@@ -241,8 +245,10 @@ export default {
 				document.querySelectorAll(".activeCell").forEach(el => {
 					el.classList.add("done");
 					el.classList.remove("activeCell");
-					el.disabled = true;
+				//	el.disabled = true;
 				});
+
+				document.querySelector(".crossword__definition.position-" + this.activePosition).classList.add("definition-done");
 
 				this.solved.push(valToCheck);
 				this.solvedToggle = true;
@@ -317,14 +323,30 @@ export default {
 				el.classList.add("activeCell");
 			});
 
-			this.currentOrientation = words[this.activePosition].orientation;
+			this.currentOrientation = this.wordsArray[this.activePosition].orientation;
 
 			//document.querySelector(".current")?.classList?.remove("current");
 		}, 
+
+		async fetchPosts() {
+			try {
+				//this.isPostLoading = true;
+				const response = await axios.get("http://localhost:5000/words")
+					.then(response => (this.wordsArray = response.data))
+					.then(() => (this.wordsCount = this.wordsArray.length))
+					.then(() => (this.initCrossword()));
+			}
+			catch (e) {
+				alert(e);
+			}
+			finally {
+				//this.isPostLoading = false;
+			}
+		},
 	}, 
 
 	mounted() {
-		this.initCrossword();
+		this.fetchPosts();
 	}, 
 }
 </script>
