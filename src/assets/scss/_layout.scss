@@ -3,6 +3,10 @@ body {
   font-family: var(--font-family);
   font-size: var(--font-size);
 
+  &.lock {
+		overflow: hidden;
+  }
+
   &::-webkit-scrollbar {
     width: 15px;
   }

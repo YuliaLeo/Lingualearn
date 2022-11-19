@@ -19,7 +19,9 @@ export default {
 	methods: {
 		addActive() {
 			this.burgerActive = !this.burgerActive;
-			this.$emit("addActive", this.burgerActive)
+			this.$emit("addActive", this.burgerActive);
+			// для того, чтобы при открытии меню саму страницу нельзя было скролить
+			document.querySelector("body")?.classList?.toggle("lock"); 
 		}
 	}
 }

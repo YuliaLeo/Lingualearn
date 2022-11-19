@@ -1,4 +1,5 @@
 <template>
+<div class="main-content__crossword container">
 	<div class="crossword">
 		<h2 class="crossword__title title--h2 text_m">Кроссворд</h2>
 		<div class="crossword__main">
@@ -34,6 +35,7 @@
 			</div>
 		</div>
 	</div>
+</div>
 </template>
 
 <script>

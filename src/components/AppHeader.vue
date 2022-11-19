@@ -1,15 +1,15 @@
 <template>
-  <header class="header" 
+  <header class="header"
 	:class="{'header--active': headerActive}">
       <div class="header__container container">
-         <Logo></Logo>
+         <logo></logo>
        	<div class="spacer"></div>
          <nav class="header__buttons">
             <a href="#" class="button button--link text-bold_medium">Quiz</a>
-            <a href="#" class="button button--link text-bold_medium">Crossword</a>
+            <a href="/#/crossword" class="button button--link text-bold_medium">Crossword</a>
          </nav>
-			<Avatar></Avatar>
-         <BurgerMenu @addActive="addHeaderActive"></BurgerMenu>
+			<avatar></avatar>
+         <burger-menu @addActive="addHeaderActive"></burger-menu>
       </div>
    </header>
 </template>
@@ -31,7 +31,6 @@ export default {
 	methods: {
 		addHeaderActive(state) {
 			this.headerActive = state;
-			this.$emit("addActive", state); //?
 		}
 	}
 }
