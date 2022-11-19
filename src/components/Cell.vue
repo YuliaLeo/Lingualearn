@@ -14,20 +14,28 @@
 </template>
 
 <script>
+const LEFT_ARROW = 39;
+const RIGHT_ARROW = 37;
+const UP_ARROW = 38;
+const DOWN_ARROW = 40;
+const TAB = 9;
+const BACKSPACE = 8;
+const DELETE = 46;
+
 export default {
 	methods: {
 		onKeyUp(event) {
-         if (event.keyCode === 9) {
+         if (event.keyCode === TAB) {
             return false;
          } 
 			else if (
-            event.keyCode === 37 ||
-            event.keyCode === 39 ||
-            event.keyCode === 8 || 
-            event.keyCode === 46
+            event.keyCode === RIGHT_ARROW ||
+            event.keyCode === LEFT_ARROW ||
+            event.keyCode === BACKSPACE || 
+            event.keyCode === DELETE
 			) {
-            if (event.keyCode === 8 || event.keyCode === 46) {
-					 this.$emit("nextPrevNav", event, 37);
+            if (event.keyCode === BACKSPACE || event.keyCode === DELETE) {
+					 this.$emit("nextPrevNav", event, RIGHT_ARROW);
             } 
 				else {
 					this.$emit("nextPrevNav", event);
@@ -39,7 +47,7 @@ export default {
 		},
 
 		onKeyDown(event) {
-			if (event.keyCode == 9) {  
+			if (event.keyCode == TAB) {  
 				event.preventDefault();
     		}
 		},

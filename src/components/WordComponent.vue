@@ -27,6 +27,11 @@ import Cell from "@/components/Cell.vue";
 import Definition from "@/components/Definition.vue";
 import oneWord from "@/oneWord.json";
 
+const LEFT_ARROW = 39;
+const RIGHT_ARROW = 37;
+const UP_ARROW = 38;
+const DOWN_ARROW = 40;
+
 export default {
 	components: {
 		Cell, Definition
@@ -85,13 +90,13 @@ export default {
 			let currentInput;
 
 			switch (keyCode) {
-         	case 39:
+         	case LEFT_ARROW:
 					currentInput = parentInputElement.nextElementSibling?.querySelector("input");
 					currentInput?.classList?.add("current");
 					currentInput?.focus();
 					break;
 
-          	case 37:
+          	case RIGHT_ARROW:
 					currentInput = parentInputElement.previousElementSibling?.querySelector("input");
 					currentInput?.classList?.add("current")
 					currentInput?.focus()
@@ -133,6 +138,7 @@ export default {
 			this.getActivePosition(event.target);
 
 			let actives = document.querySelectorAll(".activeCell");
+			
 			actives.forEach(el => {
 				el.classList.remove("activeCell");
 			});
