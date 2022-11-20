@@ -6,6 +6,10 @@
 					<cell
 						v-for="(letter, letterIdx) in lettersCount"
 						:key="letterIdx"
+            ref="cells"
+            v-model="cells[letterIdx]"
+            @prev="selectActiveCell(letterIdx - 1)"
+            @next="selectActiveCell(letterIdx + 1)"
 						@nextPrevNav="nextPrevNav"
 						@checkAnswer="checkAnswer"
 						@updateByEntry="updateByEntry"
@@ -38,7 +42,11 @@ export default {
 	},
 
 	data() {
+    const lettersCount = oneWord.words[0].answer.length;
+    const cells = new Array(lettersCount).fill('');
+
 		return {
+      cells,
 			wordsArray: oneWord.words,
 			lettersCount: oneWord.words[0].answer.length,
 			crosswordWord: oneWord.words[0],
@@ -47,6 +55,19 @@ export default {
 	},
 	
 	methods: {
+    selectActiveCell(letterIdx) {
+      if (letterIdx === this.lettersCount) {
+        console.info(this.cells.join('').toLowerCase(), this.crosswordWord.answer);
+        // if true ->
+        //     * mark this word as SUCCESS
+        //     * go to the next word
+        // if false ->
+        //     * mark this word as FAIL
+      } else {
+        this.$refs.cells[letterIdx]?.focus();
+      }
+    },
+
 		getClasses(cell, classType) {
 			let classes = [],
       	positions = [];
