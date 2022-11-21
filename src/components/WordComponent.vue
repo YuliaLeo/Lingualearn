@@ -6,20 +6,16 @@
 					<cell
 						v-for="(letter, letterIdx) in lettersCount"
 						:key="letterIdx"
-            ref="cells"
-            v-model="cells[letterIdx]"
-            @prev="selectActiveCell(letterIdx - 1)"
-            @next="selectActiveCell(letterIdx + 1)"
-						@nextPrevNav="nextPrevNav"
-						@checkAnswer="checkAnswer"
-						@updateByEntry="updateByEntry"
-						:class="['position-'+0]">
+					ref="cells"
+					v-model="cells[letterIdx]"
+					@prev="selectActiveCell(letterIdx - 1)"
+					@next="selectActiveCell(letterIdx + 1)"
+					>
 					</cell>
 				</div>
 			</div>
 			<div class="crossword__definitions">
-				<definition :clue="crosswordWord.clue"
-					:class="['position-'+0]">
+				<definition :clue="crosswordWord.clue">
 				</definition>
 			</div>
 		</div>
@@ -31,145 +27,38 @@ import Cell from "@/components/Cell.vue";
 import Definition from "@/components/Definition.vue";
 import oneWord from "@/oneWord.json";
 
-const LEFT_ARROW = 39;
-const RIGHT_ARROW = 37;
-const UP_ARROW = 38;
-const DOWN_ARROW = 40;
-
 export default {
 	components: {
 		Cell, Definition
 	},
 
 	data() {
-    const lettersCount = oneWord.words[0].answer.length;
-    const cells = new Array(lettersCount).fill('');
+		const lettersCount = oneWord.words[0].answer.length;
+		const cells = new Array(lettersCount).fill('');
 
 		return {
-      cells,
-			wordsArray: oneWord.words,
-			lettersCount: oneWord.words[0].answer.length,
+      	cells,
 			crosswordWord: oneWord.words[0],
-			activePosition: 0,
+			lettersCount: oneWord.words[0].answer.length,
 		}
 	},
 	
 	methods: {
     selectActiveCell(letterIdx) {
-      if (letterIdx === this.lettersCount) {
-        console.info(this.cells.join('').toLowerCase(), this.crosswordWord.answer);
-        // if true ->
-        //     * mark this word as SUCCESS
-        //     * go to the next word
-        // if false ->
-        //     * mark this word as FAIL
-      } else {
-        this.$refs.cells[letterIdx]?.focus();
-      }
-    },
-
-		getClasses(cell, classType) {
-			let classes = [],
-      	positions = [];
-
-			cell.classList.forEach(cellClass => classes.push(cellClass));
-
-        	for (let i = 0; i < classes.length; i++) {
-          	if (!classes[i].indexOf(classType)) {
-            	positions.push(classes[i]);
-          	}
-        	}
-
-        return positions;
-      },
-		
-		getActivePosition(cellInput) {
-			let classes = this.getClasses(cellInput.parentElement, "position");
-			this.activePosition = classes[0].split("-")[1];
-      },
-
-		nextPrevNav(event, newKeyCode) {
-     		let keyCode = newKeyCode ? newKeyCode : event.which;
-			let parentInputElement = event.target.parentElement;
-
-			this.getActivePosition(event.target);
-        	
-			let actives = document.querySelectorAll(".activeCell");
-  
-			actives.forEach(el => {
-				 el.classList.remove("activeCell");
-			});
-			  
-			actives = document.querySelectorAll(".position-" + this.activePosition + " input");
-			
-			actives.forEach(el => {
-				el.classList.add("activeCell");
-			});
-
-			document.querySelector(".current")?.classList?.remove("current");
-
-			let currentInput;
-
-			switch (keyCode) {
-         	case LEFT_ARROW:
-					currentInput = parentInputElement.nextElementSibling?.querySelector("input");
-					currentInput?.classList?.add("current");
-					currentInput?.focus();
-					break;
-
-          	case RIGHT_ARROW:
-					currentInput = parentInputElement.previousElementSibling?.querySelector("input");
-					currentInput?.classList?.add("current")
-					currentInput?.focus()
-					break;
-					
-				default:
-					break;
-        	}
-		},
-
-		checkAnswer(event) {
-			let valToCheck, currVal = [];
-
-			this.getActivePosition(event.target);
-
-			valToCheck = this.wordsArray[this.activePosition].answer.toLowerCase();
-
-			document.querySelectorAll(".position-" + this.activePosition + " input").forEach(el => {
-				currVal.push(el.value.toLowerCase());
-			});
-
-			currVal = currVal.join('');
-
-			if (valToCheck === currVal) {
-				document.querySelectorAll(".activeCell").forEach(el => {
-					el.classList.add("done");
-					el.classList.remove("activeCell");
-					el.disabled = true;
-				});
-
-				document.querySelector(".crossword__definition.position-" + this.activePosition).classList.add("definition-done");
-				return;
+      if (this.cells.join('').length === this.lettersCount) {
+			if (this.cells.join('').toLowerCase() === this.crosswordWord.answer) {
+				this.$refs.cells.forEach((cell) => cell.$refs.cell.classList.add("letter-correct"));
 			}
+			else {
+				this.$refs.cells.forEach((cell) => cell.$refs.cell.classList.add("letter-incorrect"))
+			}
+      } 
+		else {
+			this.$refs.cells.forEach((cell) => cell.$refs.cell.classList.remove("letter-correct", "letter-incorrect"));
+      }
 
-			this.nextPrevNav(event, 39);
-		}, 
-
-		updateByEntry(event) {
-			this.getActivePosition(event.target);
-
-			let actives = document.querySelectorAll(".activeCell");
-			
-			actives.forEach(el => {
-				el.classList.remove("activeCell");
-			});
-			
-			actives = document.querySelectorAll(".position-" + this.activePosition + " input");
-
-			actives.forEach(el => {
-				el.classList.add("activeCell");
-			});
-		},
+		this.$refs.cells[letterIdx]?.focus();
+    },
 	}, 
 
 	mounted() {

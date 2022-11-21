@@ -55,7 +55,7 @@
     text-align: center;
     text-transform: uppercase;
 
-	 &.activeCell {
+	 &.active-cell {
 		background-color: var(--black-transparent-dark-color);
 	 }
 
@@ -107,8 +107,7 @@
 }
 
 .show-square {
-  border: 1px solid var(--primary-dark-color);
-  background-color: var(--white-color);
+
 }
 
 .definition-done {
@@ -118,17 +117,9 @@
 }
 
 .letter-correct {
-  .show-square {
     background-color: var(--bg-green-ultra-light-color);
-  }
 }
 
 .letter-incorrect {
-  .show-square {
     background-color: var(--red-light-color);
-  }
-}
-
-.done {
-	background-color: var(--bg-green-ultra-light-color);
 }

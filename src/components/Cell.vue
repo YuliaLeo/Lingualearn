@@ -6,7 +6,7 @@
 			maxlength="1"
 			class="crossword__input text-bold_medium"
       ref="cell"
-			@keydown="handleInput"
+		@keydown="handleInput"
       :value="modelValue"
 		/>
 		<span class="crossword__number"></span>
@@ -60,10 +60,8 @@ export default {
             // nothing
         }
       }
-
       return event.preventDefault();
     },
-
 		onKeyUp(event) {
          if (event.keyCode === TAB) {
             return false;
@@ -85,13 +83,11 @@ export default {
 				this.$emit("checkAnswer", event);
 			}
 		},
-
 		onKeyDown(event) {
 			if (event.keyCode == TAB) {  
 				event.preventDefault();
     		}
 		},
-
 		onClick(event) {
 			this.$emit("updateByEntry", event);
 		},
