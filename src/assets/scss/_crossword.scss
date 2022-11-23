@@ -45,6 +45,11 @@
     }
   }
 
+  &__inner {
+		width: 100%;
+		height: 100%;
+  }
+
   &__input {
     width: 100%;
     height: 100%;
@@ -55,9 +60,17 @@
     text-align: center;
     text-transform: uppercase;
 
-	 &.active-cell {
+	&.active-cell {
 		background-color: var(--black-transparent-dark-color);
-	 }
+	}
+
+	&.letter-correct {
+		background-color: var(--bg-green-ultra-light-color);
+  	}
+  
+  	&.letter-incorrect {
+		background-color: var(--red-light-color);
+  	}
 
     &:focus {
       border: 2px solid var(--primary-dark-color);
@@ -106,20 +119,8 @@
   }
 }
 
-.show-square {
-
-}
-
 .definition-done {
   text-decoration: line-through;
   background-color: var(--bright-green-color);
   color: var(--white-color);
-}
-
-.letter-correct {
-    background-color: var(--bg-green-ultra-light-color);
-}
-
-.letter-incorrect {
-    background-color: var(--red-light-color);
 }

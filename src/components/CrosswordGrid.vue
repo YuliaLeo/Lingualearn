@@ -7,296 +7,259 @@
 					class="crossword__row"
 					v-for="(row, rowIdx) in rowsCount"
 					:key="rowIdx">
-					<div 
-						v-for="(col, colIdx) in colsCount" 
-						:class="['crossword__ceil', getCellClasses(colIdx, rowIdx)]"
-						:key="`${colIdx},${rowIdx}`"
+						<cell
+							v-for="(col, colIdx) in colsCount"
+							:key="`${colIdx},${rowIdx}`"
+							:wordsCoords="wordsCoords"
+							ref="cells"
+							v-model="cells[rowIdx][colIdx]"
+							:positions="getPositionNumbers(colIdx + 1, rowIdx + 1)"
+							:orientation="getOrientation"
+							:startCells="getStartCells"
+							:x="colIdx+1"
+							:y="rowIdx+1"
+							@cellActive="selectActiveCells"
+							@prevHorizontal="selectActiveCell(rowIdx, colIdx - 1)"
+							@nextHorizontal="selectActiveCell(rowIdx, colIdx + 1)"
+							@prevVertical="selectActiveCell(rowIdx - 1, colIdx)"
+							@nextVertical="selectActiveCell(rowIdx + 1, colIdx)"
 						>
-						<input
-							autocomplete="off"
-							type="text"
-							maxlength="1"
-							class="crossword__input text-bold_medium"
-							@keyup="onKeyUp"
-							@click="onClick"
-							@keydown="onKeyDown"
-							v-if="isInArray(colIdx, rowIdx)"
-						/>
-						<span class="crossword__number">{{getWordNumber(colIdx, rowIdx)}}</span>
-					</div>
+						</cell>
 				</div>
 			</div>
 			<div class="crossword__definitions">
-				<div 
-				v-for="(word, wordIdx) in wordsCount"
-				:key="wordIdx"
-				:class="['crossword__definition', `position-${wordIdx}`]">
-					{{wordIdx + 1}}. {{wordsArray[wordIdx].clue}}
-				</div>
+				<definition 
+					v-for="(word, wordIdx) in wordsCount"
+					:key="wordIdx"
+					ref="definitions"
+					:clue="wordsArray[wordIdx].clue"
+					:number="wordIdx+1"
+					:position="wordsArray[wordIdx].position-1"
+				>
+				</definition>
 			</div>
 		</div>
 	</div>
+	<div class="loading" v-if="isLoading">
+		Загрузка страницы
+	</div>
 </template>
-	
+
 <script>
-	import axios from 'axios';
-	export default {
-		data() {
-			return {
-				wordsArray: [],
-				wordsCount: 0,
-				wordCoords: [],
-				rows: [],
-				cols: [],
-				rowsCount: 0, 
-				colsCount: 0,
-				startWordCells: [],
-				currentOrientation: "across",
-				activePosition: 0,
-				solved: [],
-				solvedToggle: false,
-				mode: "interacting",
+import axios from 'axios';
+import Cell from "@/components/Cell.vue";
+import Definition from "@/components/Definition.vue";
+
+export default {
+	components: {
+		Cell, Definition
+	},
+
+	data() {
+		return {
+			wordsCoords: [],
+			wordsCount: 0,
+			wordsArray: [],
+			rows: [],
+			cols: [],
+			rowsCount: 0, 
+			colsCount: 0,
+			cells: [],
+			activePosition: 0,
+			startWordCells: [],
+			isLoading: false,
+		}
+	}, 
+	
+	methods: {
+		calculateCrosswordSize() {
+			// записываем координаты имеющихся слов в двумерный массив, первый цикл по словам, второй по буквам
+			for (let i = 0; i < this.wordsCount; i++) {
+          	this.wordsCoords.push(i);
+			 	this.wordsCoords[i] = [];
+
+			 	for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
+					this.wordsCoords[i].push(j);
+					let coords = this.wordsArray[i].orientation === 'across' 
+							?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
+							: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
+					this.wordsCoords[i][j] = coords;
+          	}
+			}
+
+			// записываем в массивы значения строк и колонок
+			for (let i = 0; i < this.wordsCount; i++) {
+				for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
+           		this.cols.push(this.wordsCoords[i][j].split(",")[0]);
+            	this.rows.push(this.wordsCoords[i][j].split(",")[1]);
+          	}
+        	}
+
+			// выбираем наибольшие, чтобы определить размер кроссворда
+        	this.rowsCount = Math.max.apply(Math, this.rows);
+        	this.colsCount = Math.max.apply(Math, this.cols);
+			
+			// заполняем все клеточки пустыми значениями
+			for (let i = 0; i < this.rowsCount; i++) {
+				this.cells.push(i);
+				this.cells[i] = [];
+
+				for (let j = 0; j < this.colsCount; j++) {
+					this.cells[i].push(j);
+					this.cells[i][j] = "";
+				}
 			}
 		}, 
-		
-		methods: {
-			initCrossword() {
-				this.calculateCrosswordSize();
-				this.getStartCells();
-			},
-			calculateCrosswordSize() {
-				for (let i = 0; i < this.wordsCount; i++) {
-					 this.wordCoords.push(i);
-					 this.wordCoords[i] = [];
-					 for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-						this.wordCoords[i].push(j);
-						let coords = this.wordsArray[i].orientation === 'across' 
-								?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
-								: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
-						this.wordCoords[i][j] = coords;
-					 }
-				}
-				for (let i = 0; i < this.wordsCount; i++) {
-					for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-						  this.cols.push(this.wordCoords[i][j].split(",")[0]);
-						this.rows.push(this.wordCoords[i][j].split(",")[1]);
-					 }
-				  }
-				  this.rowsCount = Math.max.apply(Math, this.rows);
-				  this.colsCount = Math.max.apply(Math, this.cols);
-			}, 
-			getStartCells() {
-				for (let i = 0; i < this.wordsCount; i++) {
-					this.startWordCells.push(this.wordCoords[i][0]); 
-				}
-			},
-			getCellClasses(cols, rows) {
-				const classes = [];
-				this.wordCoords.forEach((coordsArray, index) => {
-					coordsArray.forEach(coords => {
-						if (coords === `${cols + 1},${rows + 1}`) {
-							classes.push(`position-${index}`);
-						}
-					})
-				});
-				return classes;
-			},
-			getWordNumber(cols, rows){
-				let wordNumber;
-				this.startWordCells.forEach((cellCoords, index) => {
-					if (cellCoords === `${cols + 1},${rows + 1}`){
-						wordNumber = index + 1;
+
+		getPositionNumbers(col, row) {
+			let positions = [];
+			// проходим по массиву с координатами слов и смотрим находится ли переданные в функцию координаты 
+			// в этом массиве, если да, то заполняем массив позиций
+			// В массиве позиций для каждой координаты определяется, к какому слову она принадлежит (может принадлежать ко 2 сразу)
+			this.wordsCoords.forEach((array, index) => {
+				array.forEach(coord => {
+					if (coord === `${col},${row}`) {
+						positions.push("position-" + index);
 					}
 				});
-				return wordNumber;
-			},
-			isInArray(cols, rows) {
-				let flag;
-				this.wordCoords.forEach((coordsArray, index) => {
-					coordsArray.forEach(coords => {
-						if (coords === `${cols + 1},${rows + 1}`) {
-							flag = true;
-						}
-					})
-				});
-				return flag;
-			},
-			onKeyUp(event) {
-				this.mode = "interacting"
-				switch (event.which) {
-					case 39: 
-					case 37:
-					  this.currentOrientation = "across";
-					  break;
-					case 38:
-					case 40:
-						this.currentOrientation = "down";
-					  break;
-					default:
-					  break;
-				}
-				if (event.keyCode === 9) {
-					return false;
-				} 
-				else if (
-					event.keyCode === 37 ||
-					event.keyCode === 38 ||
-					event.keyCode === 39 ||
-					event.keyCode === 40 ||
-					event.keyCode === 8 || 
-					event.keyCode === 46
-				) {
-					if (event.keyCode === 8 || event.keyCode === 46) {
-						this.currentOrientation === "across"
-						 ? this.nextPrevNav(event, 37)
-						 : this.nextPrevNav(event, 38);
-					} else {
-						this.nextPrevNav(event);
-					}
-				} else {
-					this.checkAnswer(event);
-				}
-			},
-			onKeyDown(event) {
-				if (event.keyCode == 9) {  
-					event.preventDefault();
-				 }
-			},
-			onClick(event) {
-				this.mode = "setting ui";
-				//if (this.solvedToggle) this.solvedToggle = false;
-				this.updateByEntry(event);
-			},
-			getClasses(cell, classType) {
-				let classes = [],
-				positions = [];
-				cell.classList.forEach(cellClass => classes.push(cellClass));
-			  for (let i = 0; i < classes.length; i++) {
-				 if (!classes[i].indexOf(classType)) {
-					positions.push(classes[i]);
-				 }
-			  }
-			  return positions;
-			},
+			});
+
+			return positions;
+		},
+
+		selectActiveCell(newRow, newCol) {
+			let colsTotal = this.colsCount;
+			// ставим фокус на следующую/предыдущую ячейку
+			let newCell = colsTotal*newRow + newCol;
+			this.$refs.cells[newCell]?.focus();
+
+			// выбираем, к каким номерам слов принадлежит выбранная клеточка
+			let cellFirstWord = this.$refs.cells[newCell]?.positions[0]?.split("-")[1];
+			let cellSecondWord = this.$refs.cells[newCell]?.positions[1]?.split("-")[1];
 			
-			getActivePosition(cellInput) {
-				let classes = this.getClasses(cellInput.parentElement, "position");
-				  if (classes.length > 1) {
-					 let firstOrientation = this.wordsArray[classes[0].split("-")[1]].orientation;
-					 let secondOrientation = this.wordsArray[classes[1].split("-")[1]].orientation;
-					// для изменения направления, если кликнили на первый элемент в другом направлении
-					let ifCellIsFirst = [...document.querySelectorAll(".position-" + classes[0].split("-")[1] + " input")].indexOf(cellInput);
-					if (this.mode === "setting ui") {
-						this.currentOrientation = ifCellIsFirst === 0 ? firstOrientation : secondOrientation;
+			// меняем активную позицию слова, только если находимся на клеточке, которая принадлежит только одному слову
+			if (cellFirstWord && !cellSecondWord) {
+				this.activePosition = cellFirstWord;
+			}
+
+			// выбираем все буквы, принадлежащие активной в текущий момент позиции
+			let currentValue = this.wordsCoords[this.activePosition].map(coords => {
+				return this.cells[coords.split(",")[1] - 1][coords.split(",")[0] - 1];
+			}).join('');
+
+			// если длина текущего слова равна длине ответа на это слово, смотрим правильное ли оно
+			if (currentValue.length === this.wordsArray[this.activePosition].answer.length) {
+					if (currentValue.toLowerCase() === this.wordsArray[this.activePosition].answer) {
+						this.$refs.cells.forEach((cell) => {
+							// если ответ правильный выделяем буквы активного слова одним способом, иначе другим
+							if (cell.positions.includes("position-" + this.activePosition)){
+								cell.$refs.cell.classList.remove("letter-incorrect");
+								cell.$refs.cell.classList.add("letter-correct");
+							}
+						});
+						this.$refs.definitions.forEach(definition => {
+							if (definition.position === Number(this.activePosition)) {
+								definition.$refs.definition.classList.add("definition-done");
+							}
+						});
 					}
-					 
-					if (firstOrientation === this.currentOrientation) {
-						this.activePosition = classes[0].split("-")[1];
-					} 
-					else if (secondOrientation === this.currentOrientation) {
-						this.activePosition = classes[1].split("-")[1];
+					else {
+						this.$refs.cells.forEach((cell) => {
+							if (cell.positions.includes("position-" + this.activePosition)) {
+								cell.$refs.cell.classList.remove("letter-correct");
+								cell.$refs.cell.classList.add("letter-incorrect");
+							}
+						});
+						this.$refs.definitions.forEach(definition => {
+							if (definition.position === Number(this.activePosition)) {
+								definition.$refs.definition.classList.remove("definition-done");
+							}
+						});
 					}
-				} 
-				else {
-					this.activePosition = classes[0].split("-")[1];
-				}
-			},
-			checkAnswer(event) {
-				let valToCheck, currVal = [];
-				this.getActivePosition(event.target);
-				valToCheck = this.wordsArray[this.activePosition].answer.toLowerCase();
-				document.querySelectorAll(".position-" + this.activePosition + " input").forEach(el => {
-					currVal.push(el.value.toLowerCase());
+			} 
+			else { // при несовпадении длины убираем выделение букв
+				this.$refs.cells.forEach((cell) => {
+					if (cell.positions.includes("position-" + this.activePosition)) {
+						cell.$refs.cell.classList.remove("letter-correct", "letter-incorrect");
+					}
 				});
-				currVal = currVal.join('');
-				if (valToCheck === currVal) {
-					document.querySelectorAll(".activeCell").forEach(el => {
-						el.classList.add("done");
-						el.classList.remove("activeCell");
-					//	el.disabled = true;
-					});
-					document.querySelector(".crossword__definition.position-" + this.activePosition).classList.add("definition-done");
-					this.solved.push(valToCheck);
-					this.solvedToggle = true;
-					return;
-				}
-				this.currentOrientation === "across" ? this.nextPrevNav(event, 39) : this.nextPrevNav(event, 40);
-			},
-			nextPrevNav(event, newKeyCode) {
-				  let keyCode = newKeyCode ? newKeyCode : event.which;
-				let parentInputElement = event.target.parentElement;
-				  this.getActivePosition(event.target);
-				  
-				let actives = document.querySelectorAll(".activeCell");
-				actives.forEach(el => {
-					el.classList.remove("activeCell");
+				this.$refs.definitions.forEach(definition => {
+					if (definition.position === Number(this.activePosition)) {
+						definition.$refs.definition.classList.remove("definition-done");
+					}
 				});
-				
-				actives = document.querySelectorAll(".position-" + this.activePosition + " input");
-				actives.forEach(el => {
-					el.classList.add("activeCell");
+			}
+   	},
+
+		selectActiveCells(settings) {
+			// выбор активных клеточек при клике
+			if (settings.mode === "click") {
+				// идем по всем клеточкам
+				this.$refs.cells.forEach(cell => {
+					// сначала убираем у всех класс active, если они активны
+					cell.$refs.cell?.classList.remove("active-cell");
+
+					// если мы кликнули на клеточку, которая относится к двум словам,
+					// класс active должен прикрепиться к тем клеточкам слова, которые относятся ко второму слову
+					if (settings.positions.length > 1) {
+						if (cell.positions.includes(settings.positions[1])) {
+							cell.$refs.cell.classList.add("active-cell");
+							this.activePosition = settings.positions[1].split("-")[1];
+						}
+					} else if (settings.positions.length === 1) {
+						if (cell.positions.includes(settings.positions[0])) {
+							cell.$refs.cell.classList.add("active-cell");
+							this.activePosition = settings.positions[0].split("-")[1];
+						}
+					}
 				});
-				document.querySelector(".current")?.classList?.remove("current");
-				  let selector = ".position-" + this.activePosition + " input";
-				let currentInput;
-				switch (keyCode) {
-					case 39:
-						currentInput = parentInputElement.nextElementSibling?.querySelector("input");
-						currentInput?.classList?.add("current");
-						currentInput?.focus();
-						break;
-					 case 37:
-						currentInput = parentInputElement.previousElementSibling?.querySelector("input");
-						currentInput?.classList?.add("current")
-						currentInput?.focus()
-						break;
-					case 40:
-						currentInput = parentInputElement?.parentElement?.nextElementSibling?.querySelector(selector);
-						currentInput?.classList?.add("current")
-						currentInput?.focus()
-					break;
-					case 38:
-						currentInput = parentInputElement?.parentElement?.previousElementSibling?.querySelector(selector);
-						currentInput?.classList?.add("current")
-						currentInput?.focus()
-					default:
-						break;
-			  }
-			},
-			updateByEntry(event) {
-				this.getActivePosition(event.target);
-				let actives = document.querySelectorAll(".activeCell");
-				actives.forEach(el => {
-					el.classList.remove("activeCell");
+			} 
+			else { // выбор активных клеточек при переходе по клавиатуре
+				this.$refs.cells.forEach(cell => {
+					// сначала убираем у всех класс active, если они активны
+					cell.$refs.cell?.classList.remove("active-cell");
+
+					// выбираем активными клеточки, которые относятся к текущей активной позиции
+					if (cell.positions.includes("position-" + this.activePosition)) {
+						cell.$refs.cell.classList.add("active-cell");
+					}
 				});
-				
-				actives = document.querySelectorAll(".position-" + this.activePosition + " input");
-				actives.forEach(el => {
-					el.classList.add("activeCell");
-				});
-				this.currentOrientation = this.wordsArray[this.activePosition].orientation;
-				//document.querySelector(".current")?.classList?.remove("current");
-			}, 
-			async fetchPosts() {
-				try {
-					//this.isPostLoading = true;
-					const response = await axios.get("http://localhost:5000/words")
-						.then(response => (this.wordsArray = response.data))
-						.then(() => (this.wordsCount = this.wordsArray.length))
-						.then(() => (this.initCrossword()));
-				}
-				catch (e) {
-					alert(e);
-				}
-				finally {
-					//this.isPostLoading = false;
-				}
-			},
-		}, 
-		mounted() {
-			this.fetchPosts();
-		}, 
+			}
+		},
+
+		async fetchPosts() {
+			try {
+				this.isLoading = true;
+				const response = await axios.get("http://localhost:5000/words")
+					.then(response => (this.wordsArray = response.data))
+					.then(() => (this.wordsCount = this.wordsArray.length))
+					.then(() => (this.calculateCrosswordSize()));
+			}
+			catch (e) {
+				alert(e);
+			}
+			finally {
+				this.isLoading = false;
+			}
+		},
+	}, 
+
+	mounted() {
+		this.fetchPosts();
+	}, 
+
+	computed: {
+		getOrientation() {
+			return this.wordsArray[this.activePosition].orientation;
+		},
+		getStartCells() {
+	      for (let i = 0; i < this.wordsCount; i++) {
+				this.startWordCells.push(this.wordsCoords[i][0]); 
+	      }
+			return this.startWordCells;
+      },
 	}
+}
 </script>
 
 <style lang="scss" scoped>
