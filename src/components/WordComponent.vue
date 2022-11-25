@@ -3,7 +3,7 @@
 		<div class="crossword">
 			<div class="crossword__main">
 				<div class="crossword__row">
-					<cell
+					<cell-for-one-word
 						v-for="(letter, letterIdx) in lettersCount"
 						:key="letterIdx"
 					ref="cells"
@@ -11,25 +11,25 @@
 					@prev="selectActiveCell(letterIdx - 1)"
 					@next="selectActiveCell(letterIdx + 1)"
 					>
-					</cell>
+					</cell-for-one-word>
 				</div>
 			</div>
 			<div class="crossword__definitions">
-				<definition :clue="crosswordWord.clue">
-				</definition>
+				<definition-for-one-word :clue="crosswordWord.clue">
+				</definition-for-one-word>
 			</div>
 		</div>
 	</div>
 </template>
 
 <script>
-import Cell from "@/components/Cell.vue";
-import Definition from "@/components/Definition.vue";
+import CellForOneWord from "@/components/CellForOneWord.vue";
+import DefinitionForOneWord from "@/components/DefinitionForOneWord.vue";
 import oneWord from "@/oneWord.json";
 
 export default {
 	components: {
-		Cell, Definition
+		CellForOneWord, DefinitionForOneWord
 	},
 
 	data() {

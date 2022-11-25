@@ -79,6 +79,7 @@ export default {
 						break;
 					default:
 				}
+				
 				let positions = this.positions;
 				this.$emit("cellActive", {positions});
 			}

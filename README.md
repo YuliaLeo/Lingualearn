@@ -20,6 +20,12 @@ The project will represent a platform for learning foreing languages.
 npm install
 ```
 
+## Running database
+
+```
+json-server db.json --watch --port 5000
+```
+
 ### Compiles and hot-reloads for development
 
 ```

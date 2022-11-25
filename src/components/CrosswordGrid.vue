@@ -34,7 +34,7 @@
 					ref="definitions"
 					:clue="wordsArray[wordIdx].clue"
 					:number="wordIdx+1"
-					:position="wordsArray[wordIdx].position-1"
+					:position="wordsArray[wordIdx].position - 1"
 				>
 				</definition>
 			</div>
@@ -57,21 +57,22 @@ export default {
 
 	data() {
 		return {
-			wordsCoords: [],
-			wordsCount: 0,
-			wordsArray: [],
-			rows: [],
-			cols: [],
-			rowsCount: 0, 
-			colsCount: 0,
-			cells: [],
-			activePosition: 0,
-			startWordCells: [],
-			isLoading: false,
+			wordsCoords: [], // массив координат слов
+			wordsCount: 0, // кол-во слов
+			wordsArray: [], // массив со словами и их характеристиками
+			rows: [], // номера всех имеющихся строк
+			cols: [], // номера всех имеющихся столбцов
+			rowsCount: 0, // максимальное кол-во строк
+			colsCount: 0, // максимальное кол-во столбцов
+			cells: [], // массив значений в клетоках кроссворда
+			activePosition: 0, // текущая позиция вводимого слова
+			startWordCells: [], // массив координат первых клеточек всех слов
+			isLoading: false, // индикатор загрузки
 		}
 	}, 
 	
 	methods: {
+		// подсчет размеров кроссворда и заполнение клеточек пустыми значениями
 		calculateCrosswordSize() {
 			// записываем координаты имеющихся слов в двумерный массив, первый цикл по словам, второй по буквам
 			for (let i = 0; i < this.wordsCount; i++) {
@@ -111,6 +112,7 @@ export default {
 			}
 		}, 
 
+		// получение номеров позиций слов для клеточек
 		getPositionNumbers(col, row) {
 			let positions = [];
 			// проходим по массиву с координатами слов и смотрим находится ли переданные в функцию координаты 
@@ -127,6 +129,7 @@ export default {
 			return positions;
 		},
 
+		// выбор активной позиции слова при переходе по клавиатуре и проверка правильности ввода слов
 		selectActiveCell(newRow, newCol) {
 			let colsTotal = this.colsCount;
 			// ставим фокус на следующую/предыдущую ячейку
@@ -191,6 +194,7 @@ export default {
 			}
    	},
 
+		// выбор активных в текущий момент клеточек слова
 		selectActiveCells(settings) {
 			// выбор активных клеточек при клике
 			if (settings.mode === "click") {
@@ -226,7 +230,8 @@ export default {
 				});
 			}
 		},
-
+		
+		// получение слов с сервера
 		async fetchPosts() {
 			try {
 				this.isLoading = true;
@@ -242,23 +247,26 @@ export default {
 				this.isLoading = false;
 			}
 		},
-	}, 
-
-	mounted() {
-		this.fetchPosts();
-	}, 
+	},
 
 	computed: {
+		// высчитывание текущей ориентации слова
 		getOrientation() {
 			return this.wordsArray[this.activePosition].orientation;
 		},
+
+		// выбор координат первых клеточек слов
 		getStartCells() {
 	      for (let i = 0; i < this.wordsCount; i++) {
 				this.startWordCells.push(this.wordsCoords[i][0]); 
 	      }
 			return this.startWordCells;
       },
-	}
+	}, 
+
+	mounted() {
+		this.fetchPosts();
+	}, 
 }
 </script>
 

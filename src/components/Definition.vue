@@ -8,9 +8,9 @@
 <script>
 export default {
 	props: {
-		clue: {type: String,},
+		clue: {type: String},
 		number: {type: Number},
-		position: {type: Number,}
+		position: {type: Number}
 	}
 }
 </script>
