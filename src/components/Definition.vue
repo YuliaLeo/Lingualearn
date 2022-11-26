@@ -5,14 +5,22 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+
+export default defineComponent({
 	props: {
-		clue: {type: String},
-		number: {type: Number},
-		position: {type: Number}
+		clue: {
+			type: String as PropType<string>
+		},
+		number: {
+			type: Number as PropType<number>
+		},
+		position: {
+			type: Number as PropType<number>
+		}
 	}
-}
+});
 </script>
 
 <style scoped>

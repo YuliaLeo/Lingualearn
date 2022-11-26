@@ -16,40 +16,55 @@
 	</div>
 </template>
 
-<script>
-const LEFT_ARROW = 37;
-const RIGHT_ARROW = 39;
-const UP_ARROW = 38;
-const DOWN_ARROW = 40;
-const BACKSPACE = 8;
-const DELETE = 46;
+<script lang="ts">
+import { defineComponent, PropType } from 'vue';
+import { Keys } from '@/types/Constants';
 
-export default {
-  props: {
-		wordsCoords: {type: Array, required: true},
-		modelValue: {type: String},
-		positions: {type: Array},
-		orientation: {type: String},
-		startCells: {type: Array},
-		x: {type: Number},
-		y: {type: Number},
-  },
+export default defineComponent({
+  	props: {
+		wordsCoords: {
+			type: Array as PropType<Array<Array<string>>>, 
+			required: true
+		},
+		modelValue: {
+			type: String as PropType<String>
+		},
+		positions: {
+			type: Array as PropType<Array<string>>, 
+			required: true
+		},
+		orientation: {
+			type: String as PropType<String>
+		},
+		startCells: {
+			type: Array as PropType<Array<string>>, 
+			required: true
+		},
+		x: {
+			type: Number as PropType<number>, 
+			required: true
+		},
+		y: {
+			type: Number as PropType<number>,
+			required: true
+		},
+  	},
 
-  emits: [
+  	emits: [
   		'update:modelValue',
 		'nextHorizontal',
 		'prevHorizontal',
 		'prevVertical', 
 		'nextVertical',
 		'cellActive'
-  ],
+  	],
 
 	methods: {
 		focus() {
-			this.$refs.cell?.focus();
+			(this.$refs.cell as HTMLInputElement)?.focus();
 		},
 
-		handleInput(event) {
+		handleInput (event: KeyboardEvent) {
 			const char = String.fromCharCode(event.keyCode);
 			const isLetter = (/^[A-Za-z]+$/.test(char));
 
@@ -59,22 +74,22 @@ export default {
 				else this.$emit("nextVertical");
 			} else {
 				switch (event.keyCode) {
-					case BACKSPACE:
-					case DELETE:
+					case Keys.BACKSPACE:
+					case Keys.DELETE:
 						this.$emit('update:modelValue', '');
 						if (this.orientation === "across") this.$emit("prevHorizontal");
 						else this.$emit("prevVertical");
 						break;
-					case LEFT_ARROW:
+					case Keys.LEFT_ARROW:
 						this.$emit("prevHorizontal");
 						break;
-					case UP_ARROW:
+					case Keys.UP_ARROW:
 						this.$emit("prevVertical");
 						break;
-					case RIGHT_ARROW:
+					case Keys.RIGHT_ARROW:
 						this.$emit("nextHorizontal");
 						break;
-					case DOWN_ARROW:
+					case Keys.DOWN_ARROW:
 						this.$emit("nextVertical");
 						break;
 					default:
@@ -87,13 +102,13 @@ export default {
 			return event.preventDefault();
 		},
 
-		handleClick(event) {
+		handleClick () {
 			let positions = this.positions;
 			let mode = "click";
 			this.$emit("cellActive", {positions, mode});
 		},
 
-		checkFirstCell(cols, rows){
+		checkFirstCell (cols: number, rows: number) {
 			let wordNumber;
 
 			this.startCells.forEach((el, index) => {
@@ -105,7 +120,7 @@ export default {
 			return wordNumber;
 		},
 	},
-}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -1,5 +1,5 @@
 <template>
-  <header class="header"
+  	<header class="header"
 	:class="{'header--active': headerActive}">
       <div class="header__container container">
          <logo></logo>
@@ -14,26 +14,30 @@
    </header>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+
 import Logo from "@/components/Logo.vue";
 import Avatar from "@/components/Avatar.vue";
 import BurgerMenu from "@/components/BurgerMenu.vue";
 
-export default {
+export default defineComponent({
 	components: {
 		Logo, Avatar, BurgerMenu
 	}, 
+
 	data() {
 		return {
-			headerActive: false,
+			headerActive: false as boolean,
 		}
 	},
+
 	methods: {
-		addHeaderActive(state) {
+		addHeaderActive(state: boolean) {
 			this.headerActive = state;
 		}
 	}
-}
+});
 </script>
 
 <style lang="scss" scoped>

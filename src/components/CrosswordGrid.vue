@@ -45,29 +45,34 @@
 	</div>
 </template>
 
-<script>
+<script lang="ts">
+import { defineComponent } from 'vue';
+import Word from '@/types/Word';
+import Settings from '@/types/InteractSettings';
+
 import axios from 'axios';
+
 import Cell from "@/components/Cell.vue";
 import Definition from "@/components/Definition.vue";
 
-export default {
+export default defineComponent({
 	components: {
 		Cell, Definition
 	},
 
 	data() {
 		return {
-			wordsCoords: [], // массив координат слов
-			wordsCount: 0, // кол-во слов
-			wordsArray: [], // массив со словами и их характеристиками
-			rows: [], // номера всех имеющихся строк
-			cols: [], // номера всех имеющихся столбцов
-			rowsCount: 0, // максимальное кол-во строк
-			colsCount: 0, // максимальное кол-во столбцов
-			cells: [], // массив значений в клетоках кроссворда
-			activePosition: 0, // текущая позиция вводимого слова
-			startWordCells: [], // массив координат первых клеточек всех слов
-			isLoading: false, // индикатор загрузки
+			wordsCoords: [] as Array<Array<string>>, // массив координат слов
+			wordsCount: 0 as number, // кол-во слов
+			wordsArray: [] as Array<Word>, // массив со словами и их характеристиками
+			rows: [] as Array<number>, // номера всех имеющихся строк
+			cols: [] as Array<number>, // номера всех имеющихся столбцов
+			rowsCount: 0 as number, // максимальное кол-во строк
+			colsCount: 0 as number, // максимальное кол-во столбцов
+			cells: [] as Array<Array<string>>, // массив значений в клетоках кроссворда
+			activePosition: 0 as number, // текущая позиция вводимого слова
+			startWordCells: [] as Array<string>, // массив координат первых клеточек всех слов
+			isLoading: false as boolean, // индикатор загрузки
 		}
 	}, 
 	
@@ -76,23 +81,23 @@ export default {
 		calculateCrosswordSize() {
 			// записываем координаты имеющихся слов в двумерный массив, первый цикл по словам, второй по буквам
 			for (let i = 0; i < this.wordsCount; i++) {
-          	this.wordsCoords.push(i);
-			 	this.wordsCoords[i] = [];
+				if (Array.isArray(this.wordsCoords)) {
+					this.wordsCoords.push([] as Array<string>);
 
-			 	for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-					this.wordsCoords[i].push(j);
-					let coords = this.wordsArray[i].orientation === 'across' 
-							?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
-							: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
-					this.wordsCoords[i][j] = coords;
-          	}
+					for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
+						let coords = this.wordsArray[i].orientation === 'across' 
+								?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
+								: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
+						this.wordsCoords[i].push(coords);
+					}
+				}
 			}
 
 			// записываем в массивы значения строк и колонок
 			for (let i = 0; i < this.wordsCount; i++) {
 				for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-           		this.cols.push(this.wordsCoords[i][j].split(",")[0]);
-            	this.rows.push(this.wordsCoords[i][j].split(",")[1]);
+           		this.cols.push(Number(this.wordsCoords[i][j].split(",")[0]));
+            	this.rows.push(Number(this.wordsCoords[i][j].split(",")[1]));
           	}
         	}
 
@@ -101,20 +106,20 @@ export default {
         	this.colsCount = Math.max.apply(Math, this.cols);
 			
 			// заполняем все клеточки пустыми значениями
-			for (let i = 0; i < this.rowsCount; i++) {
-				this.cells.push(i);
-				this.cells[i] = [];
+			if (Array.isArray(this.cells)) {
+				for (let i = 0; i < this.rowsCount; i++) {
+					this.cells.push([] as Array<string> );
 
-				for (let j = 0; j < this.colsCount; j++) {
-					this.cells[i].push(j);
-					this.cells[i][j] = "";
+					for (let j = 0; j < this.colsCount; j++) {
+						this.cells[i].push('');
+					}
 				}
 			}
 		}, 
 
 		// получение номеров позиций слов для клеточек
-		getPositionNumbers(col, row) {
-			let positions = [];
+		getPositionNumbers(col: number, row: number) {
+			let positions: Array<string> = [];
 			// проходим по массиву с координатами слов и смотрим находится ли переданные в функцию координаты 
 			// в этом массиве, если да, то заполняем массив позиций
 			// В массиве позиций для каждой координаты определяется, к какому слову она принадлежит (может принадлежать ко 2 сразу)
@@ -130,64 +135,70 @@ export default {
 		},
 
 		// выбор активной позиции слова при переходе по клавиатуре и проверка правильности ввода слов
-		selectActiveCell(newRow, newCol) {
+		selectActiveCell(newRow: number, newCol: number) {
+			// переменные для всех клеточек и определений
+			const allCells = Array.from(this.$refs.cells as HTMLCollection) as HTMLFormElement[];
+			const allDefinitions = Array.from(this.$refs.definitions as HTMLCollection) as HTMLFormElement[];
+
+			// общее число колонок кроссворда
 			let colsTotal = this.colsCount;
+
 			// ставим фокус на следующую/предыдущую ячейку
 			let newCell = colsTotal*newRow + newCol;
-			this.$refs.cells[newCell]?.focus();
+			allCells[newCell]?.focus();
 
 			// выбираем, к каким номерам слов принадлежит выбранная клеточка
-			let cellFirstWord = this.$refs.cells[newCell]?.positions[0]?.split("-")[1];
-			let cellSecondWord = this.$refs.cells[newCell]?.positions[1]?.split("-")[1];
+			let cellFirstWord = allCells[newCell]?.positions[0]?.split("-")[1];
+			let cellSecondWord = allCells[newCell]?.positions[1]?.split("-")[1];
 			
 			// меняем активную позицию слова, только если находимся на клеточке, которая принадлежит только одному слову
 			if (cellFirstWord && !cellSecondWord) {
-				this.activePosition = cellFirstWord;
+				this.activePosition = Number(cellFirstWord);
 			}
 
 			// выбираем все буквы, принадлежащие активной в текущий момент позиции
 			let currentValue = this.wordsCoords[this.activePosition].map(coords => {
-				return this.cells[coords.split(",")[1] - 1][coords.split(",")[0] - 1];
+				return this.cells[Number(coords.split(",")[1]) - 1][Number(coords.split(",")[0]) - 1];
 			}).join('');
 
 			// если длина текущего слова равна длине ответа на это слово, смотрим правильное ли оно
 			if (currentValue.length === this.wordsArray[this.activePosition].answer.length) {
-					if (currentValue.toLowerCase() === this.wordsArray[this.activePosition].answer) {
-						this.$refs.cells.forEach((cell) => {
-							// если ответ правильный выделяем буквы активного слова одним способом, иначе другим
-							if (cell.positions.includes("position-" + this.activePosition)){
-								cell.$refs.cell.classList.remove("letter-incorrect");
-								cell.$refs.cell.classList.add("letter-correct");
-							}
-						});
-						this.$refs.definitions.forEach(definition => {
-							if (definition.position === Number(this.activePosition)) {
-								definition.$refs.definition.classList.add("definition-done");
-							}
-						});
-					}
-					else {
-						this.$refs.cells.forEach((cell) => {
-							if (cell.positions.includes("position-" + this.activePosition)) {
-								cell.$refs.cell.classList.remove("letter-correct");
-								cell.$refs.cell.classList.add("letter-incorrect");
-							}
-						});
-						this.$refs.definitions.forEach(definition => {
-							if (definition.position === Number(this.activePosition)) {
-								definition.$refs.definition.classList.remove("definition-done");
-							}
-						});
-					}
+				if (currentValue.toLowerCase() === this.wordsArray[this.activePosition].answer) {
+					allCells.forEach(cell => {
+						// если ответ правильный выделяем буквы активного слова одним способом, иначе другим
+						if (cell.positions.includes("position-" + this.activePosition)){
+							cell.$refs.cell.classList.remove("letter-incorrect");
+							cell.$refs.cell.classList.add("letter-correct");
+						}
+					});
+					allDefinitions.forEach(definition => {
+						if (definition.position === this.activePosition) {
+							definition.$refs.definition.classList.add("definition-done");
+						}
+					});
+				}
+				else {
+					allCells.forEach(cell => {
+						if (cell.positions.includes("position-" + this.activePosition)) {
+							cell.$refs.cell.classList.remove("letter-correct");
+							cell.$refs.cell.classList.add("letter-incorrect");
+						}
+					});
+					allDefinitions.forEach(definition => {
+						if (definition.position === this.activePosition) {
+							definition.$refs.definition.classList.remove("definition-done");
+						}
+					});
+				}
 			} 
 			else { // при несовпадении длины убираем выделение букв
-				this.$refs.cells.forEach((cell) => {
+				allCells.forEach(cell => {
 					if (cell.positions.includes("position-" + this.activePosition)) {
 						cell.$refs.cell.classList.remove("letter-correct", "letter-incorrect");
 					}
 				});
-				this.$refs.definitions.forEach(definition => {
-					if (definition.position === Number(this.activePosition)) {
+				allDefinitions.forEach(definition => {
+					if (definition.position === this.activePosition) {
 						definition.$refs.definition.classList.remove("definition-done");
 					}
 				});
@@ -195,11 +206,13 @@ export default {
    	},
 
 		// выбор активных в текущий момент клеточек слова
-		selectActiveCells(settings) {
+		selectActiveCells(settings: Settings) {
+			const allCells = Array.from(this.$refs.cells as HTMLCollection) as HTMLFormElement[];
+
 			// выбор активных клеточек при клике
 			if (settings.mode === "click") {
 				// идем по всем клеточкам
-				this.$refs.cells.forEach(cell => {
+				allCells.forEach(cell => {
 					// сначала убираем у всех класс active, если они активны
 					cell.$refs.cell?.classList.remove("active-cell");
 
@@ -208,18 +221,18 @@ export default {
 					if (settings.positions.length > 1) {
 						if (cell.positions.includes(settings.positions[1])) {
 							cell.$refs.cell.classList.add("active-cell");
-							this.activePosition = settings.positions[1].split("-")[1];
+							this.activePosition = Number(settings.positions[1].split("-")[1]);
 						}
 					} else if (settings.positions.length === 1) {
 						if (cell.positions.includes(settings.positions[0])) {
 							cell.$refs.cell.classList.add("active-cell");
-							this.activePosition = settings.positions[0].split("-")[1];
+							this.activePosition = Number(settings.positions[0].split("-")[1]);
 						}
 					}
 				});
 			} 
 			else { // выбор активных клеточек при переходе по клавиатуре
-				this.$refs.cells.forEach(cell => {
+				allCells.forEach(cell => {
 					// сначала убираем у всех класс active, если они активны
 					cell.$refs.cell?.classList.remove("active-cell");
 
@@ -251,12 +264,12 @@ export default {
 
 	computed: {
 		// высчитывание текущей ориентации слова
-		getOrientation() {
+		getOrientation(): string  {
 			return this.wordsArray[this.activePosition].orientation;
 		},
 
 		// выбор координат первых клеточек слов
-		getStartCells() {
+		getStartCells(): Array<string>  {
 	      for (let i = 0; i < this.wordsCount; i++) {
 				this.startWordCells.push(this.wordsCoords[i][0]); 
 	      }
@@ -267,7 +280,7 @@ export default {
 	mounted() {
 		this.fetchPosts();
 	}, 
-}
+});
 </script>
 
 <style lang="scss" scoped>

@@ -9,13 +9,16 @@
 	</div>
 </template>
 
-<script>
-export default {
+<script lang="ts">
+import { defineComponent } from 'vue';
+
+export default defineComponent({
 	data() {
 		return {
-			burgerActive: false,
+			burgerActive: false as boolean,
 		}
 	}, 
+
 	methods: {
 		addActive() {
 			this.burgerActive = !this.burgerActive;
@@ -24,7 +27,7 @@ export default {
 			document.body?.classList?.toggle("lock"); 
 		}
 	}
-}
+});
 </script>
 
 <style lang="scss" scoped>
