@@ -7,6 +7,14 @@
 					class="crossword__row"
 					v-for="(row, rowIdx) in rowsCount"
 					:key="rowIdx">
+
+          <!--
+          :positions="getPositionNumbers(colIdx + 1, rowIdx + 1)"
+          лучше не делать так, получается для каждой ячейки происходит вызов метода, в котором перебор значений
+          много лучше рассчитать заранее positions (на этапе генерации кроссворда) как свойство объекта,
+          который будет передаваться в каждую ячейку
+          -->
+
 						<cell
 							v-for="(col, colIdx) in colsCount"
 							:key="`${colIdx},${rowIdx}`"
@@ -61,6 +69,10 @@ export default defineComponent({
 	},
 
 	data() {
+    // комментарии к переменным здесь излишни
+    // либо переменная на английском уже сама себя описывает (wordsCoords)
+    // либо переменную надо переименовать чтобы легче понимать что она делает startWordCells -> firstCellsOfWords
+
 		return {
 			wordsCoords: [] as Array<Array<string>>, // массив координат слов
 			wordsCount: 0 as number, // кол-во слов
@@ -78,7 +90,16 @@ export default defineComponent({
 	
 	methods: {
 		// подсчет размеров кроссворда и заполнение клеточек пустыми значениями
+
+    // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
+    // много-много логики, которая покрывается тестами
 		calculateCrosswordSize() {
+      // часть того что здесь представлена не является data, оно скорее computed свойства на основе data,
+      // но такой рефакторинг может быть затруднителен
+
+      // вместо лишних комментариев правильнее создавать дополнительные методы, имена которых будут
+      // будут описывать то что ты хочешь сделать, как например следующий может быть initWordsCoords()
+
 			// записываем координаты имеющихся слов в двумерный массив, первый цикл по словам, второй по буквам
 			for (let i = 0; i < this.wordsCount; i++) {
 				if (Array.isArray(this.wordsCoords)) {
@@ -88,6 +109,10 @@ export default defineComponent({
 						let coords = this.wordsArray[i].orientation === 'across' 
 								?  `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}` 
 								: `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
+
+            // не самая лучшая идея для хранения данных coords, не надо строковым значением хранить объект,
+            // более того у тебя есть typescript, гораздо удобнее иметь Point {x: number, y: number} для каждой координаты
+            // и иметь Point[] массив для слова, иметь Point[][] для кроссворда
 						this.wordsCoords[i].push(coords);
 					}
 				}
@@ -96,6 +121,7 @@ export default defineComponent({
 			// записываем в массивы значения строк и колонок
 			for (let i = 0; i < this.wordsCount; i++) {
 				for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
+              // две след строки можно подрефакторить без дублирования
            		this.cols.push(Number(this.wordsCoords[i][j].split(",")[0]));
             	this.rows.push(Number(this.wordsCoords[i][j].split(",")[1]));
           	}
@@ -111,7 +137,7 @@ export default defineComponent({
 					this.cells.push([] as Array<string> );
 
 					for (let j = 0; j < this.colsCount; j++) {
-						this.cells[i].push('');
+						this.cells[i].push(''); // лучше null иметь по умолчанию для пустых значений, привязка к строковому типу излишняя
 					}
 				}
 			}
@@ -126,6 +152,9 @@ export default defineComponent({
 			this.wordsCoords.forEach((array, index) => {
 				array.forEach(coord => {
 					if (coord === `${col},${row}`) {
+            // не надо привязываться к строковым значениям, так теряется типизация,
+            // которая может сильно упростить написание и чтение кода
+            // корректнее иметь полноценный объект, в котором одно из полей будет массив positions: number[]
 						positions.push("position-" + index);
 					}
 				});
@@ -135,12 +164,16 @@ export default defineComponent({
 		},
 
 		// выбор активной позиции слова при переходе по клавиатуре и проверка правильности ввода слов
+    // вместо И в комментарии выше должно быть дробление на маленькие функции внутри след метода
+    // более того, часть данных можно рассчитать заранее, на этапе генерации кроссворда, меньше нагружая рассчет внутри
+    // этого метода
 		selectActiveCell(newRow: number, newCol: number) {
 			// переменные для всех клеточек и определений
 			const allCells = Array.from(this.$refs.cells as HTMLCollection) as HTMLFormElement[];
 			const allDefinitions = Array.from(this.$refs.definitions as HTMLCollection) as HTMLFormElement[];
 
 			// общее число колонок кроссворда
+      // лишняя переменная
 			let colsTotal = this.colsCount;
 
 			// ставим фокус на следующую/предыдущую ячейку
@@ -148,6 +181,7 @@ export default defineComponent({
 			allCells[newCell]?.focus();
 
 			// выбираем, к каким номерам слов принадлежит выбранная клеточка
+      // дублирование в след двух строках, корректнее выносить в отдельную функцию чтобы избежать
 			let cellFirstWord = allCells[newCell]?.positions[0]?.split("-")[1];
 			let cellSecondWord = allCells[newCell]?.positions[1]?.split("-")[1];
 			
@@ -164,6 +198,16 @@ export default defineComponent({
 			// если длина текущего слова равна длине ответа на это слово, смотрим правильное ли оно
 			if (currentValue.length === this.wordsArray[this.activePosition].answer.length) {
 				if (currentValue.toLowerCase() === this.wordsArray[this.activePosition].answer) {
+
+          // далее можно сделать много лучше, если у тебя будет без обращения к REFS,
+          // правильнее иметь отдельные свойства в объекте cell, который ты передаешь в компонент Cell
+          // который бы отвечал за все те булевские переменные, которые ты проверяешь,
+          // interface Cell {
+          //   x: number;
+          //   y: number;
+          //   isCorrect: boolean; // даст возможность как раз навесить нужный класс внутри template выше
+          // }
+
 					allCells.forEach(cell => {
 						// если ответ правильный выделяем буквы активного слова одним способом, иначе другим
 						if (cell.positions.includes("position-" + this.activePosition)){
@@ -178,6 +222,7 @@ export default defineComponent({
 					});
 				}
 				else {
+          // это почти полное дублирование ветки if выше, надо зарефактрить без повторения за счет отдельных маленьких функций
 					allCells.forEach(cell => {
 						if (cell.positions.includes("position-" + this.activePosition)) {
 							cell.$refs.cell.classList.remove("letter-correct");
@@ -214,6 +259,9 @@ export default defineComponent({
 				// идем по всем клеточкам
 				allCells.forEach(cell => {
 					// сначала убираем у всех класс active, если они активны
+
+          // аналогично комменту про interface Cell выше в функции selectActiveCell,
+          // лучше дополнить интерфейс Cell с полем isActive: boolean
 					cell.$refs.cell?.classList.remove("active-cell");
 
 					// если мы кликнули на клеточку, которая относится к двум словам,
@@ -262,6 +310,7 @@ export default defineComponent({
 		},
 	},
 
+  // лучше всё что ниже иметь до methods, т.к. это часть интерфейса этого компонента
 	computed: {
 		// высчитывание текущей ориентации слова
 		getOrientation(): string  {
