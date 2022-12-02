@@ -1,6 +1,4 @@
 <template>
-  <!--  сильно прыгает форматирование по файлам, надо применить по проекту автоформатирование ко всем файлам-->
-
   <header class="header" :class="{ 'header--active': headerActive }">
     <div class="header__container container">
       <logo></logo>
@@ -11,9 +9,6 @@
           >Crossword</a
         >
       </nav>
-
-      <!--        если какие-то компоненты в итоге не будут использованы - их лучше удалить, сейчас у тебя нет профиля пользователя-->
-      <avatar></avatar>
       <burger-menu @addActive="addHeaderActive"></burger-menu>
     </div>
   </header>
@@ -23,13 +18,11 @@
 import { defineComponent } from "vue";
 
 import Logo from "@/components/Logo.vue";
-import Avatar from "@/components/Avatar.vue";
 import BurgerMenu from "@/components/BurgerMenu.vue";
 
 export default defineComponent({
   components: {
     Logo,
-    Avatar,
     BurgerMenu,
   },
 

@@ -23,7 +23,7 @@
             v-model="cells[rowIdx][colIdx]"
             :positions="getPositionNumbers(colIdx + 1, rowIdx + 1)"
             :orientation="getOrientation"
-            :startCells="getStartCells"
+            :firstCellsOfWords="getStartCells"
             :x="colIdx + 1"
             :y="rowIdx + 1"
             @cellActive="selectActiveCells"
@@ -68,22 +68,18 @@ export default defineComponent({
   },
 
   data() {
-    // комментарии к переменным здесь излишни
-    // либо переменная на английском уже сама себя описывает (wordsCoords)
-    // либо переменную надо переименовать чтобы легче понимать что она делает startWordCells -> firstCellsOfWords
-
     return {
-      wordsCoords: [] as Array<Array<string>>, // массив координат слов
-      wordsCount: 0 as number, // кол-во слов
-      wordsArray: [] as Array<Word>, // массив со словами и их характеристиками
-      rows: [] as Array<number>, // номера всех имеющихся строк
-      cols: [] as Array<number>, // номера всех имеющихся столбцов
-      rowsCount: 0 as number, // максимальное кол-во строк
-      colsCount: 0 as number, // максимальное кол-во столбцов
-      cells: [] as Array<Array<string>>, // массив значений в клетоках кроссворда
-      activePosition: 0 as number, // текущая позиция вводимого слова
-      startWordCells: [] as Array<string>, // массив координат первых клеточек всех слов
-      isLoading: false as boolean, // индикатор загрузки
+      wordsCoords: [] as Array<Array<string>>, 
+      wordsCount: 0 as number, 
+      wordsArray: [] as Array<Word>, 
+      rows: [] as Array<number>, 
+      cols: [] as Array<number>, 
+      rowsCount: 0 as number, 
+      colsCount: 0 as number,
+      cells: [] as Array<Array<string>>,
+      activePosition: 0 as number, 
+      firstCellsOfWords: [] as Array<string>, 
+      isLoading: false as boolean, 
     };
   },
 
@@ -336,9 +332,9 @@ export default defineComponent({
     // выбор координат первых клеточек слов
     getStartCells(): Array<string> {
       for (let i = 0; i < this.wordsCount; i++) {
-        this.startWordCells.push(this.wordsCoords[i][0]);
+        this.firstCellsOfWords.push(this.wordsCoords[i][0]);
       }
-      return this.startWordCells;
+      return this.firstCellsOfWords;
     },
   },
 

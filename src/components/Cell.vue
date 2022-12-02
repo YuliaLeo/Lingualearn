@@ -36,7 +36,7 @@ export default defineComponent({
     orientation: {
       type: String as PropType<String>,
     },
-    startCells: {
+    firstCellsOfWords: {
       type: Array as PropType<Array<string>>,
       required: true,
     },
@@ -111,7 +111,7 @@ export default defineComponent({
     checkFirstCell(cols: number, rows: number) {
       let wordNumber;
 
-      this.startCells.forEach((el, index) => {
+      this.firstCellsOfWords.forEach((el, index) => {
         if (el === `${cols},${rows}`) {
           wordNumber = index + 1;
         }
