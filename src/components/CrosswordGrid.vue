@@ -8,22 +8,14 @@
           v-for="(row, rowIdx) in rowsCount"
           :key="rowIdx"
         >
-          <!--
-          :positions="getPositionNumbers(colIdx + 1, rowIdx + 1)"
-          лучше не делать так, получается для каждой ячейки происходит вызов метода, в котором перебор значений
-          много лучше рассчитать заранее positions (на этапе генерации кроссворда) как свойство объекта,
-          который будет передаваться в каждую ячейку
-          -->
-
           <cell
             v-for="(col, colIdx) in colsCount"
             :key="`${colIdx},${rowIdx}`"
-            :wordsCoords="wordsCoords"
             ref="cells"
             v-model="cells[rowIdx][colIdx]"
-            :positions="getPositionNumbers(colIdx + 1, rowIdx + 1)"
-            :orientation="getOrientation"
-            :firstCellsOfWords="getStartCells"
+            :positions="positions[rowIdx][colIdx]"
+            :orientation="getWordOrientation"
+            :firstCellsOfWords="getFirstCellsOfWords"
             :x="colIdx + 1"
             :y="rowIdx + 1"
             @cellActive="selectActiveCells"
@@ -54,6 +46,7 @@
 <script lang="ts">
 import { defineComponent } from "vue";
 import Word from "@/types/Word";
+import Point from "@/types/Point";
 import Settings from "@/types/InteractSettings";
 
 import axios from "axios";
@@ -69,94 +62,113 @@ export default defineComponent({
 
   data() {
     return {
-      wordsCoords: [] as Array<Array<string>>, 
-      wordsCount: 0 as number, 
-      wordsArray: [] as Array<Word>, 
-      rows: [] as Array<number>, 
-      cols: [] as Array<number>, 
-      rowsCount: 0 as number, 
+      wordsCoords: [] as Array<Array<Point>>,
+      wordsCount: 0 as number,
+      wordsArray: [] as Array<Word>,
+      rows: [] as Array<number>,
+      cols: [] as Array<number>,
+      rowsCount: 0 as number,
       colsCount: 0 as number,
-      cells: [] as Array<Array<string>>,
-      activePosition: 0 as number, 
-      firstCellsOfWords: [] as Array<string>, 
-      isLoading: false as boolean, 
+      cells: [] as Array<Array<string | null>>,
+		positions: [] as Array<Array<Array<number>>>,
+      activePosition: 0 as number,
+      firstCellsOfWords: [] as Array<Point>,
+      isLoading: false as boolean,
     };
   },
 
+  computed: {
+    getWordOrientation(): string {
+      return this.wordsArray[this.activePosition].orientation;
+    },
+
+    getFirstCellsOfWords(): Array<Point> {
+      for (let i = 0; i < this.wordsCount; i++) {
+        this.firstCellsOfWords.push(this.wordsCoords[i][0]);
+      }
+      return this.firstCellsOfWords;
+    },
+  },
+
+  mounted() {
+    this.fetchPosts();
+  },
+
   methods: {
-    // подсчет размеров кроссворда и заполнение клеточек пустыми значениями
-
-    // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
-    // много-много логики, которая покрывается тестами
-    calculateCrosswordSize() {
-      // часть того что здесь представлена не является data, оно скорее computed свойства на основе data,
-      // но такой рефакторинг может быть затруднителен
-
-      // вместо лишних комментариев правильнее создавать дополнительные методы, имена которых будут
-      // будут описывать то что ты хочешь сделать, как например следующий может быть initWordsCoords()
-
-      // записываем координаты имеющихся слов в двумерный массив, первый цикл по словам, второй по буквам
+    initWordsCoords() {
       for (let i = 0; i < this.wordsCount; i++) {
-        if (Array.isArray(this.wordsCoords)) {
-          this.wordsCoords.push([] as Array<string>);
+        this.wordsCoords.push([] as Array<Point>);
 
-          for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-            let coords =
-              this.wordsArray[i].orientation === "across"
-                ? `${this.wordsArray[i].startx++},${this.wordsArray[i].starty}`
-                : `${this.wordsArray[i].startx},${this.wordsArray[i].starty++}`;
-
-            // не самая лучшая идея для хранения данных coords, не надо строковым значением хранить объект,
-            // более того у тебя есть typescript, гораздо удобнее иметь Point {x: number, y: number} для каждой координаты
-            // и иметь Point[] массив для слова, иметь Point[][] для кроссворда
-            this.wordsCoords[i].push(coords);
-          }
-        }
-      }
-
-      // записываем в массивы значения строк и колонок
-      for (let i = 0; i < this.wordsCount; i++) {
         for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
-          // две след строки можно подрефакторить без дублирования
-          this.cols.push(Number(this.wordsCoords[i][j].split(",")[0]));
-          this.rows.push(Number(this.wordsCoords[i][j].split(",")[1]));
-        }
-      }
-
-      // выбираем наибольшие, чтобы определить размер кроссворда
-      this.rowsCount = Math.max.apply(Math, this.rows);
-      this.colsCount = Math.max.apply(Math, this.cols);
-
-      // заполняем все клеточки пустыми значениями
-      if (Array.isArray(this.cells)) {
-        for (let i = 0; i < this.rowsCount; i++) {
-          this.cells.push([] as Array<string>);
-
-          for (let j = 0; j < this.colsCount; j++) {
-            this.cells[i].push(""); // лучше null иметь по умолчанию для пустых значений, привязка к строковому типу излишняя
-          }
+          let cellCoords: Point = {
+				row:
+              this.wordsArray[i].orientation === "across"
+                ? this.wordsArray[i].row
+                : this.wordsArray[i].row++,
+            col:
+              this.wordsArray[i].orientation === "across"
+                ? this.wordsArray[i].col++
+                : this.wordsArray[i].col,
+          };
+          this.wordsCoords[i].push(cellCoords);
         }
       }
     },
 
-    // получение номеров позиций слов для клеточек
-    getPositionNumbers(col: number, row: number) {
-      let positions: Array<string> = [];
-      // проходим по массиву с координатами слов и смотрим находится ли переданные в функцию координаты
-      // в этом массиве, если да, то заполняем массив позиций
-      // В массиве позиций для каждой координаты определяется, к какому слову она принадлежит (может принадлежать ко 2 сразу)
-      this.wordsCoords.forEach((array, index) => {
-        array.forEach((coord) => {
-          if (coord === `${col},${row}`) {
-            // не надо привязываться к строковым значениям, так теряется типизация,
-            // которая может сильно упростить написание и чтение кода
-            // корректнее иметь полноценный объект, в котором одно из полей будет массив positions: number[]
-            positions.push("position-" + index);
-          }
-        });
-      });
+    getCrosswordSize() {
+      for (let i = 0; i < this.wordsCount; i++) {
+        for (let j = 0; j < this.wordsArray[i].answer.length; j++) {
+          // две след строки можно подрефакторить без дублирования
+          this.cols.push(this.wordsCoords[i][j].col);
+          this.rows.push(this.wordsCoords[i][j].row);
+        }
+      }
 
-      return positions;
+      this.rowsCount = Math.max.apply(Math, this.rows);
+      this.colsCount = Math.max.apply(Math, this.cols);
+    },
+
+    initCellsValues() {
+      for (let i = 0; i < this.rowsCount; i++) {
+        this.cells.push([] as Array<string | null>);
+
+        for (let j = 0; j < this.colsCount; j++) {
+          this.cells[i].push(null);
+        }
+      }
+    },
+
+    getPositionsOfWordsForCells() {
+      for (let i = 0; i < this.rowsCount; i++) {
+        this.positions.push([] as Array<Array<number>>);
+
+        for (let j = 0; j < this.colsCount; j++) {
+          this.positions[i].push([]);
+
+          this.wordsCoords.forEach((word, wordIndex) => {
+            word.forEach((coords) => {
+              if (coords.row === i + 1 && coords.col === j + 1) {
+                this.positions[i][j].push(wordIndex);
+              }
+            });
+          });
+        }
+      }
+    },
+
+    // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
+    // много-много логики, которая покрывается тестами
+    initCrossword() {
+      // часть того что здесь представлена не является data, оно скорее computed свойства на основе data,
+      // но такой рефакторинг может быть затруднителен
+
+      this.initWordsCoords();
+
+      this.getCrosswordSize();
+
+      this.initCellsValues();
+
+      this.getPositionsOfWordsForCells();
     },
 
     // выбор активной позиции слова при переходе по клавиатуре и проверка правильности ввода слов
@@ -172,18 +184,14 @@ export default defineComponent({
         this.$refs.definitions as HTMLCollection
       ) as HTMLFormElement[];
 
-      // общее число колонок кроссворда
-      // лишняя переменная
-      let colsTotal = this.colsCount;
-
       // ставим фокус на следующую/предыдущую ячейку
-      let newCell = colsTotal * newRow + newCol;
+      let newCell = this.colsCount * newRow + newCol;
       allCells[newCell]?.focus();
 
       // выбираем, к каким номерам слов принадлежит выбранная клеточка
       // дублирование в след двух строках, корректнее выносить в отдельную функцию чтобы избежать
-      let cellFirstWord = allCells[newCell]?.positions[0]?.split("-")[1];
-      let cellSecondWord = allCells[newCell]?.positions[1]?.split("-")[1];
+      let cellFirstWord = allCells[newCell]?.positions[0];
+      let cellSecondWord = allCells[newCell]?.positions[1];
 
       // меняем активную позицию слова, только если находимся на клеточке, которая принадлежит только одному слову
       if (cellFirstWord && !cellSecondWord) {
@@ -193,9 +201,7 @@ export default defineComponent({
       // выбираем все буквы, принадлежащие активной в текущий момент позиции
       let currentValue = this.wordsCoords[this.activePosition]
         .map((coords) => {
-          return this.cells[Number(coords.split(",")[1]) - 1][
-            Number(coords.split(",")[0]) - 1
-          ];
+          return this.cells[coords.row - 1][coords.col - 1];
         })
         .join("");
 
@@ -219,7 +225,7 @@ export default defineComponent({
 
           allCells.forEach((cell) => {
             // если ответ правильный выделяем буквы активного слова одним способом, иначе другим
-            if (cell.positions.includes("position-" + this.activePosition)) {
+            if (cell.positions.includes(this.activePosition)) {
               cell.$refs.cell.classList.remove("letter-incorrect");
               cell.$refs.cell.classList.add("letter-correct");
             }
@@ -232,7 +238,7 @@ export default defineComponent({
         } else {
           // это почти полное дублирование ветки if выше, надо зарефактрить без повторения за счет отдельных маленьких функций
           allCells.forEach((cell) => {
-            if (cell.positions.includes("position-" + this.activePosition)) {
+            if (cell.positions.includes(this.activePosition)) {
               cell.$refs.cell.classList.remove("letter-correct");
               cell.$refs.cell.classList.add("letter-incorrect");
             }
@@ -246,7 +252,7 @@ export default defineComponent({
       } else {
         // при несовпадении длины убираем выделение букв
         allCells.forEach((cell) => {
-          if (cell.positions.includes("position-" + this.activePosition)) {
+          if (cell.positions.includes(this.activePosition)) {
             cell.$refs.cell.classList.remove(
               "letter-correct",
               "letter-incorrect"
@@ -282,12 +288,12 @@ export default defineComponent({
           if (settings.positions.length > 1) {
             if (cell.positions.includes(settings.positions[1])) {
               cell.$refs.cell.classList.add("active-cell");
-              this.activePosition = Number(settings.positions[1].split("-")[1]);
+              this.activePosition = Number(settings.positions[1]);
             }
           } else if (settings.positions.length === 1) {
             if (cell.positions.includes(settings.positions[0])) {
               cell.$refs.cell.classList.add("active-cell");
-              this.activePosition = Number(settings.positions[0].split("-")[1]);
+              this.activePosition = Number(settings.positions[0]);
             }
           }
         });
@@ -298,14 +304,13 @@ export default defineComponent({
           cell.$refs.cell?.classList.remove("active-cell");
 
           // выбираем активными клеточки, которые относятся к текущей активной позиции
-          if (cell.positions.includes("position-" + this.activePosition)) {
+          if (cell.positions.includes(this.activePosition)) {
             cell.$refs.cell.classList.add("active-cell");
           }
         });
       }
     },
 
-    // получение слов с сервера
     async fetchPosts() {
       try {
         this.isLoading = true;
@@ -313,33 +318,13 @@ export default defineComponent({
           .get("http://localhost:5000/words")
           .then((response) => (this.wordsArray = response.data))
           .then(() => (this.wordsCount = this.wordsArray.length))
-          .then(() => this.calculateCrosswordSize());
+          .then(() => this.initCrossword());
       } catch (e) {
         alert(e);
       } finally {
         this.isLoading = false;
       }
     },
-  },
-
-  // лучше всё что ниже иметь до methods, т.к. это часть интерфейса этого компонента
-  computed: {
-    // высчитывание текущей ориентации слова
-    getOrientation(): string {
-      return this.wordsArray[this.activePosition].orientation;
-    },
-
-    // выбор координат первых клеточек слов
-    getStartCells(): Array<string> {
-      for (let i = 0; i < this.wordsCount; i++) {
-        this.firstCellsOfWords.push(this.wordsCoords[i][0]);
-      }
-      return this.firstCellsOfWords;
-    },
-  },
-
-  mounted() {
-    this.fetchPosts();
   },
 });
 </script>

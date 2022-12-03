@@ -3,8 +3,8 @@ interface Word {
 	answer: string,
 	position: number,
 	orientation: string,
-	startx: number,
-	starty: number,
+	row: number,
+	col: number,
 }
 
 export default Word;

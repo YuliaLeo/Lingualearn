@@ -19,25 +19,22 @@
 <script lang="ts">
 import { defineComponent, PropType } from "vue";
 import { Keys } from "@/types/Constants";
+import Point from "@/types/Point";
 
 export default defineComponent({
   props: {
-    wordsCoords: {
-      type: Array as PropType<Array<Array<string>>>,
-      required: true,
-    },
     modelValue: {
-      type: String as PropType<String>,
+      type: String as PropType<string | null>,
     },
     positions: {
-      type: Array as PropType<Array<string>>,
+      type: Array as PropType<Array<number>>,
       required: true,
     },
     orientation: {
       type: String as PropType<String>,
     },
     firstCellsOfWords: {
-      type: Array as PropType<Array<string>>,
+      type: Array as PropType<Array<Point>>,
       required: true,
     },
     x: {
@@ -112,7 +109,7 @@ export default defineComponent({
       let wordNumber;
 
       this.firstCellsOfWords.forEach((el, index) => {
-        if (el === `${cols},${rows}`) {
+        if (el.row === rows && el.col === cols) {
           wordNumber = index + 1;
         }
       });
