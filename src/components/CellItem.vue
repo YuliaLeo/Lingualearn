@@ -6,12 +6,19 @@
         type="text"
         maxlength="1"
         class="crossword__input text-bold_medium"
+        :class="{
+          'letter-correct': cell.isCorrect,
+          'letter-incorrect': cell.isIncorrect,
+          'active-cell': cell.isActive,
+        }"
         ref="cell"
         :value="modelValue"
         @keydown="handleInput"
         @click="handleClick"
       />
-      <span class="crossword__number">{{ checkFirstCell(x, y) }}</span>
+      <span class="crossword__number">{{
+        checkFirstCell(cell.row, cell.col)
+      }}</span>
     </div>
   </div>
 </template>
@@ -20,6 +27,7 @@
 import { defineComponent, PropType } from "vue";
 import { Keys } from "@/types/Constants";
 import Point from "@/types/Point";
+import Cell from "@/types/Cell";
 
 export default defineComponent({
   props: {
@@ -37,12 +45,8 @@ export default defineComponent({
       type: Array as PropType<Array<Point>>,
       required: true,
     },
-    x: {
-      type: Number as PropType<number>,
-      required: true,
-    },
-    y: {
-      type: Number as PropType<number>,
+    cell: {
+      type: Object as PropType<Cell>,
       required: true,
     },
   },
@@ -105,7 +109,7 @@ export default defineComponent({
       this.$emit("cellActive", { positions, mode });
     },
 
-    checkFirstCell(cols: number, rows: number) {
+    checkFirstCell(rows: number, cols: number) {
       let wordNumber;
 
       this.firstCellsOfWords.forEach((el, index) => {

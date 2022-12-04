@@ -1,6 +1,6 @@
-interface settings {
+interface Settings {
 	mode: string,
-	positions: Array<string>,
+	positions: Array<number>,
 }
 
-export default settings;
+export default Settings;
