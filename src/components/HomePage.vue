@@ -1,7 +1,17 @@
 <template>
   <div class="homepage container">
     <div class="homepage__main">
-      <div class="homepage__intro"></div>
+      <div class="homepage__block homepage-block homepage-block--main">
+        <h1 class="homepage__title">A platform for learning languages</h1>
+        <div class="homepage__info">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Dignissimos,
+          tempore obcaecati corporis eum veniam omnis quos, nesciunt optio,
+          reiciendis vitae ipsum iure magni modi placeat ipsa eveniet officia
+          reprehenderit enim unde aspernatur necessitatibus. Dicta obcaecati
+          sint et, repellat quis tempore officia deserunt veniam molestiae
+          voluptatibus. Saepe provident fugit vitae aliquam?
+        </div>
+      </div>
       <div class="homepage__block homepage-block">
         <div class="homepage-block__title">
           Lorem ipsum dolor sit amet, consectetur adipiscing elit
@@ -55,28 +65,40 @@ export default {};
     gap: 30px;
   }
 
-  &__intro {
-    height: 500px;
-    background-color: var(--bg-green-light-color);
+  &__title {
+    font-size: var(--font-size-big);
+    font-weight: normal;
+    text-align: center;
   }
+
   &__blocks {
     display: flex;
     gap: 30px;
   }
-  &__block {
-    padding: 15px;
-    background-color: var(--bg-green-light-color);
-    color: var(--white-color);
-    border-radius: 10px;
-    display: grid;
-    gap: 20px;
+
+  &__info {
+    line-height: 30px;
   }
 }
 .homepage-block {
+  display: grid;
+  gap: 20px;
+  background-color: var(--bg-green-light-color);
+  border-radius: 10px;
+  padding: 15px;
+  color: var(--white-color);
+
+  &--main {
+    gap: 30px;
+    padding: 25px;
+  }
+
   &__title {
     font-size: var(--font-size-medium);
   }
+
   &__text {
+    line-height: 24px;
   }
 
   &__button {

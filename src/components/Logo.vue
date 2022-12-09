@@ -1,5 +1,5 @@
 <template>
-  <a href="#" class="header__logo logo">
+  <a href="/homepage" class="header__logo logo">
     <h1 class="logo__text text-bold_bold">LinguaLearn</h1>
   </a>
 </template>

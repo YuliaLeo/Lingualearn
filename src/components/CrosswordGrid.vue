@@ -112,11 +112,11 @@ export default defineComponent({
   },
 
   mounted() {
-    this.fetchPosts();
+    this.fetchWords();
   },
 
   methods: {
-    async fetchPosts() {
+    async fetchWords() {
       this.isLoading = true;
       fetch("/words.json")
         .then((response) => response.json())
@@ -304,6 +304,11 @@ export default defineComponent({
         ) {
           this.highlightWord(true, false);
           this.highlightDefinition(true);
+
+          if (this.activePosition < this.wordsCount - 1) {
+            this.activePosition = this.activePosition + 1;
+            this.selectActiveCellsByKeyboard(true);
+          }
         } else {
           this.highlightWord(false, true);
           this.highlightDefinition(false);
@@ -338,12 +343,7 @@ export default defineComponent({
           settings.positions[1]
         );
       } else {
-        this.allCells.forEach((cell) => {
-          cell.cell.isActive = false;
-          if (cell.positions.includes(this.activePosition)) {
-            cell.cell.isActive = true;
-          }
-        });
+        this.selectActiveCellsByKeyboard(false);
       }
     },
 
@@ -364,6 +364,24 @@ export default defineComponent({
             cell.cell.isActive = true;
             this.activePosition = cellOfFirstWord;
           }
+        }
+      });
+    },
+
+    selectActiveCellsByKeyboard(toNextWord: boolean) {
+      this.allCells.forEach((cell) => {
+        if (toNextWord) {
+          if (
+            cell.cell.col ===
+              this.getFirstCellsOfWords[this.activePosition].col &&
+            cell.cell.row === this.getFirstCellsOfWords[this.activePosition].row
+          ) {
+            cell.focus();
+          }
+        }
+        cell.cell.isActive = false;
+        if (cell.positions.includes(this.activePosition)) {
+          cell.cell.isActive = true;
         }
       });
     },

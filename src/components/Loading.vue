@@ -1,9 +1,15 @@
 <template>
   <div class="loading" v-if="isLoading">
-    <div class="loading__text" v-if="!hasLoadingError">Загрузка страницы</div>
-    <div class="loading__error" v-if="hasLoadingError">
-      Ошибка доступа к базе данных, вы будете перенаправлены на главную страницу
-      через {{ currentTime }}
+    <div class="container">
+      <div class="loading__text" v-if="!hasLoadingError">
+        Загрузка страницы...
+      </div>
+      <div class="loading__error" v-if="hasLoadingError">
+        <p>Ошибка доступа к базе данных</p>
+        <p>
+          Вы будете перенаправлены на главную страницу через {{ currentTime }}
+        </p>
+      </div>
     </div>
   </div>
 </template>
@@ -43,6 +49,11 @@ export default defineComponent({
 
   @include mobile {
     font-size: var(--font-size-medium);
+  }
+
+  &__error {
+    display: grid;
+    gap: 20px;
   }
 }
 </style>
