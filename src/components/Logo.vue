@@ -9,5 +9,11 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/_logo.scss";
+.logo {
+  &__text {
+    color: var(--primary-light-color);
+    font-size: 18px;
+  }
+}
+
 </style>

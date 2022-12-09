@@ -9,5 +9,20 @@ export default {};
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/_footer.scss";
+.footer {
+  background-color: var(--bg-green-light-color);
+  color: var(--primary-light-color);
+  padding: 20px 0;
+
+  @include mobile {
+    padding: 10px 0;
+  }
+
+  &__container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+}
+
 </style>

@@ -48,8 +48,6 @@ import Point from "@/types/Point";
 import Cell from "@/types/Cell";
 import Definition from "@/types/Definition";
 
-import axios from "axios";
-
 import CellItem from "@/components/CellItem.vue";
 import DefinitionItem from "@/components/DefinitionItem.vue";
 
@@ -103,9 +101,10 @@ export default defineComponent({
     async fetchPosts() {
       try {
         this.isLoading = true;
-        const response = await axios
-          .get("http://localhost:5000/words")
-          .then((response) => (this.wordsProperties = response.data))
+		  
+		  fetch("/words.json")
+			 .then((response) => response.json())
+          .then((response) => (this.wordsProperties = response.words))
           .then(() => this.initCrossword())
           .then(() => this.getAllCellsAndDefinitions());
       } catch (e) {
@@ -160,6 +159,7 @@ export default defineComponent({
                 ? this.wordsProperties[i].colStart++
                 : this.wordsProperties[i].colStart,
           };
+
           this.wordsCoords[i].push(cellCoords);
         }
       }

@@ -5,56 +5,56 @@
 			"answer": "knife",
 			"position": 1,
 			"orientation": "across",
-			"row": 1,
-			"col": 4
+			"rowStart": 1,
+			"colStart": 4
 		},
 		{
 			"clue": "Салфетка",
 			"answer": "napkin",
 			"position": 2,
 			"orientation": "down",
-			"row": 1,
-			"col": 5
+			"rowStart": 1,
+			"colStart": 5
 		},
 		{
 			"clue": "Вилка",
 			"answer": "fork",
 			"position": 3,
 			"orientation": "down",
-			"row": 1,
-			"col": 7
+			"rowStart": 1,
+			"colStart": 7
 		},
 		{
 			"clue": "Миска",
 			"answer": "bowl",
 			"position": 4,
 			"orientation": "down",
-			"row": 5,
-			"col": 3
+			"rowStart": 5,
+			"colStart": 3
 		},
 		{
 			"clue": "Ложка",
 			"answer": "spoon",
 			"position": 5,
 			"orientation": "across",
-			"row": 6,
-			"col": 1
+			"rowStart": 6,
+			"colStart": 1
 		},
 		{
 			"clue": "Тарелка",
 			"answer": "plate",
 			"position": 6,
 			"orientation": "across",
-			"row": 8,
-			"col": 2
+			"rowStart": 8,
+			"colStart": 2
 		},
 		{
 			"clue": "Чай",
 			"answer": "tea",
 			"position": 7,
 			"orientation": "down",
-			"row": 8,
-			"col": 5
+			"rowStart": 8,
+			"colStart": 5
 		}
 	]
 }

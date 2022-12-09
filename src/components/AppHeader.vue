@@ -5,7 +5,7 @@
       <div class="spacer"></div>
       <nav class="header__buttons">
         <a href="#" class="button button--link text-bold_medium">Quiz</a>
-        <a href="/#/crossword" class="button button--link text-bold_medium"
+        <a href="/crossword" class="button button--link text-bold_medium"
           >Crossword</a
         >
       </nav>
@@ -41,5 +41,72 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
-@import "@/assets/scss/_header.scss";
+.header {
+  background-color: var(--bg-green-light-color);
+
+  &--active {
+    .header__buttons {
+      left: 0;
+
+      &:before {
+        content: "";
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 60px;
+        background-color: var(--bg-green-light-color);
+        z-index: 3;
+      }
+    }
+  }
+
+  &__container {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+
+    @include mobile {
+      max-height: 60px;
+    }
+
+    @include tablet {
+      max-height: 80px;
+    }
+  }
+
+  &__logo {
+    z-index: 5;
+  }
+
+  &__buttons {
+    display: flex;
+    gap: 16px;
+
+    @include mobile {
+      position: fixed;
+      height: 100%;
+      width: 100%;
+      top: 0;
+      left: -100%;
+      overflow: auto;
+      z-index: 2;
+      background-color: var(--bg-primary-color);
+      transition: left 0.3s ease 0s;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 72px 16px;
+      box-sizing: border-box;
+    }
+  }
+
+  &__avatar {
+    z-index: 5;
+  }
+
+  &__burger {
+    z-index: 5;
+  }
+}
 </style>
