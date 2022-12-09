@@ -37,7 +37,11 @@
       </div>
     </div>
   </div>
-  <div class="loading" v-if="isLoading">Загрузка страницы</div>
+  <loading
+    :isLoading="isLoading"
+    :hasLoadingError="hasLoadingError"
+    :currentTime="currentTime"
+  ></loading>
 </template>
 
 <script lang="ts">
@@ -50,11 +54,13 @@ import Definition from "@/types/Definition";
 
 import CellItem from "@/components/CellItem.vue";
 import DefinitionItem from "@/components/DefinitionItem.vue";
+import Loading from "@/components/Loading.vue";
 
 export default defineComponent({
   components: {
     CellItem,
     DefinitionItem,
+    Loading,
   },
 
   data() {
@@ -77,6 +83,9 @@ export default defineComponent({
       newCellNumber: 0 as number,
       definitionProperties: [] as Array<Definition>,
       isLoading: false as boolean,
+      hasLoadingError: false as boolean,
+      currentTime: 5 as number,
+      timer: undefined as number | undefined,
     };
   },
 
@@ -93,25 +102,38 @@ export default defineComponent({
     },
   },
 
+  watch: {
+    currentTime(time) {
+      if (time === 0) {
+        clearTimeout(this.timer);
+        this.$router.push({ path: "/homepage" });
+      }
+    },
+  },
+
   mounted() {
     this.fetchPosts();
   },
 
   methods: {
     async fetchPosts() {
-      try {
-        this.isLoading = true;
-		  
-		  fetch("/words.json")
-			 .then((response) => response.json())
-          .then((response) => (this.wordsProperties = response.words))
-          .then(() => this.initCrossword())
-          .then(() => this.getAllCellsAndDefinitions());
-      } catch (e) {
-        alert(e);
-      } finally {
-        this.isLoading = false;
-      }
+      this.isLoading = true;
+      fetch("/words.json")
+        .then((response) => response.json())
+        .then((response) => (this.wordsProperties = response.words))
+        .then(() => this.initCrossword())
+        .then(() => this.getAllCellsAndDefinitions())
+        .then(() => (this.isLoading = false))
+        .catch(() => {
+          this.hasLoadingError = true;
+          this.redirectTimer();
+        });
+    },
+
+    redirectTimer() {
+      this.timer = setInterval(() => {
+        this.currentTime--;
+      }, 1000);
     },
 
     // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
