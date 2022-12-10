@@ -13,7 +13,6 @@
             :key="`${colIdx},${rowIdx}`"
             ref="cells"
             v-model="cellsValues[rowIdx][colIdx]"
-            :positions="positions[rowIdx][colIdx]"
             :cell="cellsProperties[rowIdx][colIdx]"
             :orientation="getWordOrientation"
             :firstCellsOfWords="getFirstCellsOfWords"
@@ -37,11 +36,7 @@
       </div>
     </div>
   </div>
-  <loading
-    :isLoading="isLoading"
-    :hasLoadingError="hasLoadingError"
-    :currentTime="currentTime"
-  ></loading>
+  <loading :isLoading="isLoading" :hasLoadingError="hasLoadingError"></loading>
 </template>
 
 <script lang="ts">
@@ -51,6 +46,8 @@ import Settings from "@/types/InteractSettings";
 import Point from "@/types/Point";
 import Cell from "@/types/Cell";
 import Definition from "@/types/Definition";
+
+import Toast from "@/libraries/Toast/Toast.js";
 
 import CellItem from "@/components/CellItem.vue";
 import DefinitionItem from "@/components/DefinitionItem.vue";
@@ -68,13 +65,10 @@ export default defineComponent({
       wordsCoords: [] as Array<Array<Point>>,
       wordsCount: 0 as number,
       wordsProperties: [] as Array<Word>,
-      rows: [] as Array<number>,
-      cols: [] as Array<number>,
       rowsCount: 0 as number,
       colsCount: 0 as number,
       cellsProperties: [] as Array<Array<Cell>>,
       cellsValues: [] as Array<Array<string | null>>,
-      positions: [] as Array<Array<Array<number>>>,
       activePosition: 0 as number,
       firstCellsOfWords: [] as Array<Point>,
       allCells: [] as Array<HTMLFormElement>,
@@ -84,8 +78,6 @@ export default defineComponent({
       definitionProperties: [] as Array<Definition>,
       isLoading: false as boolean,
       hasLoadingError: false as boolean,
-      currentTime: 5 as number,
-      timer: undefined as number | undefined,
     };
   },
 
@@ -102,15 +94,6 @@ export default defineComponent({
     },
   },
 
-  watch: {
-    currentTime(time) {
-      if (time === 0) {
-        clearTimeout(this.timer);
-        this.$router.push({ path: "/homepage" });
-      }
-    },
-  },
-
   mounted() {
     this.fetchWords();
   },
@@ -123,17 +106,23 @@ export default defineComponent({
         .then((response) => (this.wordsProperties = response.words))
         .then(() => this.initCrossword())
         .then(() => this.getAllCellsAndDefinitions())
-        .then(() => (this.isLoading = false))
-        .catch(() => {
-          this.hasLoadingError = true;
-          this.redirectTimer();
-        });
+        .catch(() => this.createNotification())
+        .finally(() => (this.isLoading = false));
     },
 
-    redirectTimer() {
-      this.timer = setInterval(() => {
-        this.currentTime--;
-      }, 1000);
+    createNotification() {
+      new Toast({
+        message: "Ошибка доступа к базе данных",
+        type: "danger",
+        customButtons: [
+          {
+            text: "На главную",
+            onClick: function () {
+              window.open("/homepage");
+            },
+          },
+        ],
+      });
     },
 
     // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
@@ -145,13 +134,9 @@ export default defineComponent({
 
       this.initWordsCoords();
 
-      this.getCrosswordSize();
-
       this.initCellsValues();
 
       this.initCellsProperties();
-
-      this.getPositionsOfWordsForCells();
 
       this.initDefinitionProperties();
     },
@@ -182,22 +167,16 @@ export default defineComponent({
                 : this.wordsProperties[i].colStart,
           };
 
+          this.getCrosswordSize(cellCoords.row, cellCoords.col);
+
           this.wordsCoords[i].push(cellCoords);
         }
       }
     },
 
-    getCrosswordSize() {
-      for (let i = 0; i < this.wordsCount; i++) {
-        for (let j = 0; j < this.wordsProperties[i].answer.length; j++) {
-          // две след строки можно подрефакторить без дублирования
-          this.cols.push(this.wordsCoords[i][j].col);
-          this.rows.push(this.wordsCoords[i][j].row);
-        }
-      }
-
-      this.rowsCount = Math.max.apply(Math, this.rows);
-      this.colsCount = Math.max.apply(Math, this.cols);
+    getCrosswordSize(row: number, col: number) {
+      this.rowsCount = Math.max(this.rowsCount, row);
+      this.colsCount = Math.max(this.colsCount, col);
     },
 
     initCellsValues() {
@@ -221,27 +200,22 @@ export default defineComponent({
             isCorrect: false,
             isIncorrect: false,
             isActive: false,
+            positions: [],
           });
+			 
+          this.getPositionsOfWordsForCells(i, j);
         }
       }
     },
 
-    getPositionsOfWordsForCells() {
-      for (let i = 0; i < this.rowsCount; i++) {
-        this.positions.push([] as Array<Array<number>>);
-
-        for (let j = 0; j < this.colsCount; j++) {
-          this.positions[i].push([]);
-
-          this.wordsCoords.forEach((word, wordIndex) => {
-            word.forEach((coords) => {
-              if (coords.row === i + 1 && coords.col === j + 1) {
-                this.positions[i][j].push(wordIndex);
-              }
-            });
-          });
-        }
-      }
+    getPositionsOfWordsForCells(i: number, j: number) {
+      this.wordsCoords.forEach((word, wordIndex) => {
+        word.forEach((coords) => {
+          if (coords.row === i + 1 && coords.col === j + 1) {
+            this.cellsProperties[i][j].positions.push(wordIndex);
+          }
+        });
+      });
     },
 
     initDefinitionProperties() {
@@ -282,7 +256,7 @@ export default defineComponent({
     },
 
     getCellPosition(number: number): number {
-      return this.allCells[this.newCellNumber]?.positions[number];
+      return this.allCells[this.newCellNumber]?.cell?.positions[number];
     },
 
     getCurrentWordValue() {
@@ -321,7 +295,7 @@ export default defineComponent({
 
     highlightWord(isWordCorrect: boolean, isWordIncorrect: boolean) {
       this.allCells.forEach((cell) => {
-        if (cell.positions.includes(this.activePosition)) {
+        if (cell.cell.positions.includes(this.activePosition)) {
           cell.cell.isCorrect = isWordCorrect;
           cell.cell.isIncorrect = isWordIncorrect;
         }
@@ -355,12 +329,12 @@ export default defineComponent({
         cell.cell.isActive = false;
 
         if (cellOfSecondWord) {
-          if (cell.positions.includes(cellOfSecondWord)) {
+          if (cell.cell.positions.includes(cellOfSecondWord)) {
             cell.cell.isActive = true;
             this.activePosition = cellOfSecondWord;
           }
         } else {
-          if (cell.positions.includes(cellOfFirstWord)) {
+          if (cell.cell.positions.includes(cellOfFirstWord)) {
             cell.cell.isActive = true;
             this.activePosition = cellOfFirstWord;
           }
@@ -380,7 +354,7 @@ export default defineComponent({
           }
         }
         cell.cell.isActive = false;
-        if (cell.positions.includes(this.activePosition)) {
+        if (cell.cell.positions.includes(this.activePosition)) {
           cell.cell.isActive = true;
         }
       });
@@ -390,5 +364,6 @@ export default defineComponent({
 </script>
 
 <style lang="scss" scoped>
+@import "@/libraries/Toast/Toast.css";
 @import "@/assets/scss/crossword";
 </style>

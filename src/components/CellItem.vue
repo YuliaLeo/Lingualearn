@@ -1,6 +1,6 @@
 <template>
   <div class="crossword__ceil">
-    <div class="crossword__inner" v-if="positions.length > 0">
+    <div class="crossword__inner" v-if="cell.positions.length > 0">
       <input
         autocomplete="off"
         type="text"
@@ -33,10 +33,6 @@ export default defineComponent({
   props: {
     modelValue: {
       type: String as PropType<string | null>,
-    },
-    positions: {
-      type: Array as PropType<Array<number>>,
-      required: true,
     },
     orientation: {
       type: String as PropType<String>,
@@ -96,7 +92,7 @@ export default defineComponent({
           default:
         }
 
-        let positions = this.positions;
+        let positions = this.cell.positions;
         this.$emit("cellActive", { positions });
       }
 
@@ -104,7 +100,7 @@ export default defineComponent({
     },
 
     handleClick() {
-      let positions = this.positions;
+      let positions = this.cell.positions;
       let mode = "click";
       this.$emit("cellActive", { positions, mode });
     },
