@@ -4,10 +4,9 @@
       <logo></logo>
       <div class="spacer"></div>
       <nav class="header__buttons">
-        <a href="#" class="button button--link text-bold_medium">Quiz</a>
         <a href="/crossword" class="button button--link text-bold_medium"
-          >Crossword</a
-        >
+          >Crossword
+		  </a>
       </nav>
       <burger-menu @addActive="addHeaderActive"></burger-menu>
     </div>

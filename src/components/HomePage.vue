@@ -22,7 +22,7 @@
           ab illo inventore veritatis et quasi architecto beatae vitae dicta
           sunt explicabo.
         </div>
-        <a href="#" class="homepage-block__button">ipsum dolor sit</a>
+        <a href="#" class="homepage-block__button button button--link">ipsum dolor sit</a>
       </div>
       <div class="homepage__blocks">
         <div class="homepage__block homepage-block">
@@ -35,7 +35,7 @@
             quae ab illo inventore veritatis et quasi architecto beatae vitae
             dicta sunt explicabo.
           </div>
-          <a href="#" class="homepage-block__button">ipsum dolor sit</a>
+          <a href="#" class="homepage-block__button button button--link">ipsum dolor sit</a>
         </div>
         <div class="homepage__block homepage-block">
           <div class="homepage-block__title">
@@ -47,7 +47,7 @@
             quae ab illo inventore veritatis et quasi architecto beatae vitae
             dicta sunt explicabo.
           </div>
-          <a href="#" class="homepage-block__button">ipsum dolor sit</a>
+          <a href="#" class="homepage-block__button button button--link">ipsum dolor sit</a>
         </div>
       </div>
     </div>
@@ -102,12 +102,6 @@ export default {};
   }
 
   &__button {
-    text-transform: uppercase;
-    color: inherit;
-    background-color: var(--bg-green-dark-color);
-    padding: 10px;
-    border-radius: 5px;
-    max-width: 150px;
     justify-self: end;
   }
 }
