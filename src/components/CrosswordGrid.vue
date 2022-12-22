@@ -125,11 +125,7 @@ export default defineComponent({
       });
     },
 
-    // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
-    // много-много логики, которая покрывается тестами
     initCrossword() {
-      // часть того что здесь представлена не является data, оно скорее computed свойства на основе data,
-      // но такой рефакторинг может быть затруднителен
       this.wordsCount = this.wordsProperties.length;
 
       this.initWordsCoords();
@@ -228,8 +224,6 @@ export default defineComponent({
       }
     },
 
-    // более того, часть данных можно рассчитать заранее, на этапе генерации кроссворда, меньше нагружая рассчет внутри
-    // этого метода
     selectNewCell(newRow: number, newCol: number) {
       this.focusOnActiveCell(newRow, newCol);
 
