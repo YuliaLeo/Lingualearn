@@ -5,8 +5,8 @@
       <div class="spacer"></div>
       <nav class="header__buttons">
         <a href="/crossword" class="button button--link text-bold_medium"
-          >Crossword
-		  </a>
+          >Crossword</a
+        >
       </nav>
       <burger-menu @addActive="addHeaderActive"></burger-menu>
     </div>

@@ -125,7 +125,12 @@ export default defineComponent({
       });
     },
 
+    // этот метод однозначно нуждается в юнит тестах, берем массив данных и генерим на их основе кроссворд,
+    // много-много логики, которая покрывается тестами
     initCrossword() {
+      // часть того что здесь представлена не является data, оно скорее computed свойства на основе data,
+      // но такой рефакторинг может быть затруднителен
+
       this.wordsCount = this.wordsProperties.length;
 
       this.initWordsCoords();
@@ -198,7 +203,7 @@ export default defineComponent({
             isActive: false,
             positions: [],
           });
-			 
+
           this.getPositionsOfWordsForCells(i, j);
         }
       }
@@ -224,6 +229,8 @@ export default defineComponent({
       }
     },
 
+    // более того, часть данных можно рассчитать заранее, на этапе генерации кроссворда, меньше нагружая рассчет внутри
+    // этого метода
     selectNewCell(newRow: number, newCol: number) {
       this.focusOnActiveCell(newRow, newCol);
 
@@ -240,17 +247,16 @@ export default defineComponent({
     },
 
     checkCellIntersection() {
-      let cellOfFirstWord: number = this.getCellPosition(0);
-      let cellOfSecondWord: number = this.getCellPosition(1);
+      const [cellOfFirstWord, cellOfSecondWord] = this.allCells[
+        this.newCellNumber
+      ]
+        ? this.allCells[this.newCellNumber]?.cell?.positions
+        : [];
 
       // меняем активную позицию слова, только если находимся на клеточке, которая принадлежит только одному слову
       if ((cellOfFirstWord || cellOfFirstWord === 0) && !cellOfSecondWord) {
         this.activePosition = cellOfFirstWord;
       }
-    },
-
-    getCellPosition(number: number): number {
-      return this.allCells[this.newCellNumber]?.cell?.positions[number];
     },
 
     getCurrentWordValue() {

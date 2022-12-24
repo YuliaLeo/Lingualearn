@@ -2,7 +2,7 @@
 
 ## WEB-page for learning languages
 
-The project will represent a platform for learning foreing languages.
+The project represents a platform for learning foreing languages with a crossword.
 
 ## Features of the WEB-page
 
